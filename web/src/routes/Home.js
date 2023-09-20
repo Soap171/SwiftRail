@@ -3,6 +3,7 @@ import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import HomeImg from '../assets/home.jpg'
 import Destination from '../components/Destination'
+import Services from '../components/Services'
 
 function Home() {
   return (
@@ -18,7 +19,9 @@ function Home() {
     btnClass = "homeBtn"
     />
     <Destination/>
+    <Services/>
    </>
+
     
    
   )
