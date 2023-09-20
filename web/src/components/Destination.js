@@ -15,7 +15,7 @@ function Destination() {
         <h1>Discover Your Dream Destinations</h1>
         <p>Discover and embark on your ideal adventure.</p>
         <DestinationData
-
+        className = "first-des"
         heading = "Golden Gate Bridge , USA"
         text = "The iconic Golden Gate Bridge in San Francisco is a marvel of engineering and a symbol of the city. Spanning the entrance to San Francisco Bay, it offers breathtaking views and a piece of history you won't want to miss during your visit."
         image1 = {GoldenGate1}
@@ -23,7 +23,7 @@ function Destination() {
         />
 
        <DestinationData
-
+        className = "first-des-reverse"
         heading = "Discover Rome's Rich Heritage, Italy"
         text = "Explore the timeless city of Rome, where history and culture blend seamlessly. From the awe-inspiring Colosseum to the historic streets of the Vatican, immerse yourself in centuries of art, architecture, and ancient wonders.        "
         image1 = {Rome1}
@@ -32,7 +32,7 @@ function Destination() {
 
 
        <DestinationData
-
+       className = "first-des"
        heading = "Experience London, UK"
        text = "Explore the vibrant city of London, UK. With its iconic landmarks like Big Ben and the Tower Bridge, world-class museums, and diverse neighborhoods, London offers a blend of history, culture, and modernity that will captivate your senses."
        image1 = {Lodon1}
