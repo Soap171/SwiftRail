@@ -58,6 +58,12 @@ img {
     color: #222;
 }
 
+.hero-text .homeBtn:hover{
+
+    background-color: #01959a;
+    color: #fff;
+}
+
 @media screen and (max-width: 850px){
 
     .hero-text h1{
@@ -76,8 +82,8 @@ img {
     .hero-text .homeBtn{
 
         padding: 0.6rem 1.1rem;
-        background-color: #8282cd;
-        color: #fff;
+        background-color: #fff;
+        color: #222;
         
     }
 

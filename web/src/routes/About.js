@@ -2,6 +2,7 @@ import React from 'react';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import AboutImg from '../assets/about.jpg';
+import Footer from '../components/Footer';
 
 function About() {
   return (
@@ -32,6 +33,7 @@ function About() {
           </div>
         </div>
       </section>
+      <Footer/>
     </>
   );
 }
