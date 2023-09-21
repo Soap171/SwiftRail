@@ -28,6 +28,11 @@
     grid-gap:10px;
     list-style: none;
     align-items: center;
+    margin: 0 !important;
+}
+
+.nav-menu ul{
+    margin-bottom: 0 !important;
 }
 
 .nav-links{
