@@ -2,6 +2,7 @@ import React from 'react'
 import Navbar from '../components/Navbar'
 import Hero from '../components/Hero'
 import ContactImg from '../assets/contact.jpg'
+import Footer from '../components/Footer'
 
 function Contact() {
   return (
@@ -11,9 +12,8 @@ function Contact() {
     cName = "hero-other"
     heroImg = {ContactImg}
     title = "Contact"
-    
-    
     />
+    <Footer/>
     </>
     
      
