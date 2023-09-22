@@ -11,13 +11,13 @@ function Footer() {
           <div className="col-lg-4 col-md-6">
             {/* Social Icons */}
             <div className="social-icons mb-4">
-              <a href="#" className="text-white me-3">
+              <a href="https://www.facebook.com/" target='_blank' className="text-white me-3">
                 <i className="fab fa-facebook"></i>
               </a>
-              <a href="#" className="text-white me-3">
+              <a href="https://twitter.com/?lang=en" target='_blank' className="text-white me-3">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="#" className="text-white me-3">
+              <a href="https://www.instagram.com/?hl=en" target='_blank' className="text-white me-3">
                 <i className="fab fa-instagram"></i>
               </a>
             </div>
