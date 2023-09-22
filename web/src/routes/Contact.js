@@ -5,7 +5,7 @@ import ContactImg from '../assets/contact.jpg';
 import Footer from '../components/Footer';
 
 function Contact() {
-  // State to manage form inputs
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,10 +13,10 @@ function Contact() {
     message: '',
   });
 
-  // State to manage alert
+  
   const [alert, setAlert] = useState(null);
 
-  // Handle form input changes
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -25,20 +25,16 @@ function Contact() {
     });
   };
 
-  // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform form validation here (you can add more rules)
     if (!formData.name || !formData.email || !formData.subject || !formData.message) {
       setAlert({
         type: 'danger',
         message: 'Please fill in all fields.',
       });
     } else {
-      // Perform form submission (you can send data to a server here)
 
-      // Clear the form
       setFormData({
         name: '',
         email: '',
@@ -61,14 +57,12 @@ function Contact() {
       <div className="container mt-5">
         <div className="row justify-content-center">
           <div className="col-md-8">
-            {/* Alert */}
             {alert && (
               <div className={`alert alert-${alert.type}`} role="alert">
                 {alert.message}
               </div>
             )}
 
-            {/* Contact Form */}
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
                 <label htmlFor="name" className="form-label">
