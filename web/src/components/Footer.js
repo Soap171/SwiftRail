@@ -9,20 +9,18 @@ function Footer() {
       <div className="container">
         <div className="row">
           <div className="col-lg-4 col-md-6">
-            {/* Social Icons */}
             <div className="social-icons mb-4">
-              <a href="#" className="text-white me-3">
+              <a href="https://www.facebook.com/" target='_blank' className="text-white me-3">
                 <i className="fab fa-facebook"></i>
               </a>
-              <a href="#" className="text-white me-3">
+              <a href="https://twitter.com/?lang=en" target='_blank' className="text-white me-3">
                 <i className="fab fa-twitter"></i>
               </a>
-              <a href="#" className="text-white me-3">
+              <a href="https://www.instagram.com/?hl=en" target='_blank' className="text-white me-3">
                 <i className="fab fa-instagram"></i>
               </a>
             </div>
 
-            {/* Additional Content */}
             <div className="mb-4">
               <h5>Contact Us</h5>
               <p>Email: contact@travelpulse.com</p>
@@ -31,7 +29,6 @@ function Footer() {
           </div>
 
           <div className="col-lg-4 col-md-6">
-            {/* Quick Links */}
             <div className="mb-4">
               <h5>Quick Links</h5>
               <ul className="list-unstyled">
@@ -47,7 +44,6 @@ function Footer() {
           </div>
 
           <div className="col-lg-4 col-md-12">
-            {/* Newsletter */}
             <div className="mb-4">
               <h5>Subscribe to Our Newsletter</h5>
               <form>
@@ -60,7 +56,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Copyright Ownership */}
         <div className="text-center">
           <p>&copy; {new Date().getFullYear()} TravelPulse. All rights reserved.</p>
         </div>
