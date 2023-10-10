@@ -12,7 +12,7 @@ function Service() {
     <Hero
     cName = "hero-other"
     heroImg = {ServiceImg}
-    title = "Services"
+    title = "Services From SwiftRail"
     />
     <Services/>
     <Footer/>

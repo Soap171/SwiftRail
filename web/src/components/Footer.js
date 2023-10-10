@@ -47,13 +47,8 @@ function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/link2" className="footer-link">
-                    Link 2
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/link2" className="footer-link">
-                    Link 2
+                  <Link to="/Service" className="footer-link">
+                    Service
                   </Link>
                 </li>
                 {/* Add more individual Link items as needed */}
