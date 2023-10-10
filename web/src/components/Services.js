@@ -16,7 +16,8 @@ function Services() {
         image= {Guide}
         heading = "Guided Tours"
         text = "Explore the world with our knowledgeable guides who will lead you through the best destinations, ensuring an enriching travel experience."
-        
+        title = "Schedules"
+        link = "/Schedules"
        
        />
 
@@ -25,6 +26,8 @@ function Services() {
        image= {Booking}
        heading = "Accommodation Booking"
        text = "Find the perfect place to stay with our wide range of accommodation options, from luxury hotels to cozy cottages."
+       title = "Subscriptions"
+       link = "Subscriptions"
        
       
       />
@@ -35,9 +38,10 @@ function Services() {
        image= {Consultant}
        heading = "Travel Consultation"
        text = "Receive expert advice and travel tips from our experienced consultants, helping you plan the perfect getaway."
-       
-      
+       title = "Parcel Booking"
+       link = "ParcelBookings"
       />
+
       </div>
     </div>
   )

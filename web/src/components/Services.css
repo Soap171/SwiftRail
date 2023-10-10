@@ -20,10 +20,14 @@
     border-radius: 7px;
     cursor: pointer;
     padding: 1rem .8rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Center horizontally */
+    justify-content: center; /* Center vertically */
 }
 
 .s-image{
-    height: 200px;
+    height: 300px;
     border-radius: 7px;
 }
 
@@ -45,6 +49,24 @@
     padding: .9rem 0 .2rem 0;
 }
 
+.btnSubmit{
+
+    text-decoration: none;
+    background-color: #c87be7;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    color: #222;
+    margin-top: 1rem;
+}
+
+.btnSubmit:hover{
+
+    background-color: #01959a;
+    color: #fff;
+}
+
 @media screen and (max-width:850px){
 
     .services{
@@ -64,4 +86,9 @@
     .s-cards h3,p{
         text-align: center;
     }
+
+    .btnSubmit {
+        padding: 0.8rem 0.8rem; /* Adjust padding for smaller screens */
+        font-size: 0.8rem; /* Adjust font size for smaller screens */
+      }
 }
