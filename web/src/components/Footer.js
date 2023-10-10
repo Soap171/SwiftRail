@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menuitems } from './Menuitems';
 import './Footer.css';
 
 function Footer() {
@@ -32,13 +31,32 @@ function Footer() {
             <div className="mb-4">
               <h5>Quick Links</h5>
               <ul className="list-unstyled">
-              {Menuitems.map((item, index) => (
-              <li key={index}>
-                <Link  to={item.url} className="footer-link">
-                  {item.title}
-                </Link>
-              </li>
-            ))}
+                <li>
+                  <Link to="/Home" className="footer-link">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/About" className="footer-link">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Contact" className='footer-link'>
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/link2" className="footer-link">
+                    Link 2
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/link2" className="footer-link">
+                    Link 2
+                  </Link>
+                </li>
+                {/* Add more individual Link items as needed */}
               </ul>
             </div>
           </div>
