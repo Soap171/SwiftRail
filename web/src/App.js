@@ -10,8 +10,7 @@ import Login from './routes/Login'
 import SignUp from './routes/SignUp'
 import Booking from './routes/Booking';
 import Subscriptions from './routes/Subscriptions';
-import Checkout from './routes/Checkout';
-
+import CheckoutPopup from './routes/CheckoutPopup';
 
 function App() {
   return (
@@ -29,7 +28,7 @@ function App() {
         <Route path="/SignUp" element={ <SignUp/>}/>
         <Route path="/Booking" element={ <Booking/>}/>
         <Route path="/Subscriptions" element={ <Subscriptions/>}/>
-        <Route path="/Checkout" element={ <Checkout/>}/>
+        <Route path="/CheckoutPopup" element={ <CheckoutPopup/>}/>
 
       </Routes>
      

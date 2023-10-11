@@ -12,7 +12,7 @@ function SubscriptionPlan(props) {
           <h5 className="card-title">{title}</h5>
           <h6 className="card-subtitle mb-2 text-muted">{price}</h6>
           <p className="card-text">{description}</p>
-          <Link to="/Checkout" className='btn btn-primary'>Subscribe</Link>
+          <Link to="/CheckoutPopup" className='btn btn-primary'>Subscribe</Link>
         </div>
       </div>
     </div>
