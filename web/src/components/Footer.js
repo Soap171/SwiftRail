@@ -22,7 +22,7 @@ function Footer() {
 
             <div className="mb-4">
               <h5>Contact Us</h5>
-              <p>Email: contact@travelpulse.com</p>
+              <p>Email: contact@SwiftRail.com</p>
               <p>Phone: +1 (123) 456-7890</p>
             </div>
           </div>
@@ -62,7 +62,7 @@ function Footer() {
               <form>
                 <div className="input-group">
                   <input type="email" className="form-control" placeholder="Enter your email" />
-                  <button className="btn btn-primary" type="button">Subscribe</button>
+                  <button className="btn btn-success" type="button">Subscribe</button>
                 </div>
               </form>
             </div>
@@ -70,7 +70,7 @@ function Footer() {
         </div>
 
         <div className="text-center">
-          <p>&copy; {new Date().getFullYear()} TravelPulse. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SwiftRail. All rights reserved.</p>
         </div>
       </div>
     </footer>

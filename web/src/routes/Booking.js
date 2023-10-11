@@ -3,6 +3,7 @@ import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import BookingImg from '../assets/Booking.jpg';
+import '../components/Button.css'
 
 export default function Booking() {
   const [formData, setFormData] = useState({

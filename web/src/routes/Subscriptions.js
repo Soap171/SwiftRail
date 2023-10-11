@@ -5,6 +5,7 @@ import SubscriptionPlan from '../components/SubscriptionPlan';
 import img from '../assets/Subscription.jpg'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
+import '../components/Button.css'
 
 function Subscriptions() {
   return (
@@ -13,8 +14,8 @@ function Subscriptions() {
       <Hero
       heroImg = {img}
       cName = "hero-other"
-      title = "Subscriptions"
-      text = "Here is All The Subscription Plans You can Choose From Us"
+      title = "QR Subscription Plans"
+     
       />
 
         

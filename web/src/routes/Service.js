@@ -13,6 +13,7 @@ function Service() {
     cName = "hero-other"
     heroImg = {ServiceImg}
     title = "Services From SwiftRail"
+    text = "Explore The Top Services Offer From SwiftRail"
     />
     <Services/>
     <Footer/>
