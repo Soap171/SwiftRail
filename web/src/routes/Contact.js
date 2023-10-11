@@ -58,7 +58,7 @@ function Contact() {
   return (
     <>
       <Navbar />
-      <Hero cName="hero-other" heroImg={ContactImg} title="Contact" />
+      <Hero cName="hero-other" heroImg={ContactImg} title="Contact" text="Contact Us If You Need To Know Anything" />
 
       <div className="container mt-5">
         <div className="row justify-content-center">
