@@ -42,16 +42,20 @@ function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link to="/Contact" className='footer-link'>
-                    Contact
-                  </Link>
-                </li>
-                <li>
                   <Link to="/Service" className="footer-link">
                     Service
                   </Link>
                 </li>
-                {/* Add more individual Link items as needed */}
+                <li>
+                  <Link to="/Contact" className='footer-link'>
+                    Contact
+                  </Link>
+                </li>  
+                <li>
+                  <Link to="/Profile" className="footer-link">
+                    My Account
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
