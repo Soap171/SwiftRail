@@ -22,8 +22,8 @@ export const  Menuitems = [
  },
 
  {
-   title : "Login",
-   url : "/Login",
+   title : "My Account",
+   url : "/Profile",
    cName : "nav-links",
    icon : "fa fa-user-circle"
 },

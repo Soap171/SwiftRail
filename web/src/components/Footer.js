@@ -32,7 +32,7 @@ function Footer() {
               <h5>Quick Links</h5>
               <ul className="list-unstyled">
                 <li>
-                  <Link to="/Home" className="footer-link">
+                  <Link to="/" className="footer-link">
                     Home
                   </Link>
                 </li>

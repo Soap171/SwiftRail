@@ -13,7 +13,7 @@ function Login() {
     e.preventDefault();
     // Add your authentication logic here
     if (userName === 'admin' && password === '123') {
-      navigate('/Profile');
+      navigate('/');
     } else {
       alert('Login failed. Please check your credentials.');
     }
