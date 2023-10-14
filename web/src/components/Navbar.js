@@ -14,7 +14,7 @@ class Navbar extends Component {
     return (
       <div>
         <nav className='NavbarItems'>
-          <h1 className='Navbar-logo'>TravelPulse</h1>
+          <Link to="/" className='Navbar-logo'>SwiftRail</Link>
           <div className='menu-icons' onClick={this.handleClick}>
             <i className={this.state.clicked ? 'fas fa-times' : 'fas fa-bars'}></i>
           </div>
@@ -37,3 +37,4 @@ class Navbar extends Component {
 }
 
 export default Navbar;
+<h1 className='Navbar-logo'></h1>

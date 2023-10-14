@@ -1,11 +1,11 @@
 import React from 'react'
 import DestinationData from './DestinationData'
-import GoldenGate1 from '../assets/GoldenGate (1).jpg';
-import GoldenGate2 from '../assets/GoldenGate (2).jpg';
-import Rome1 from '../assets/Rome (1).jpg';
-import Rome2 from '../assets/Rome (2).jpg';
-import Lodon1 from '../assets/London (1).jpg';
-import Lodon2 from '../assets/London (2).jpg';
+import Railway1 from '../assets/railway (1).jpg';
+import Railway2 from '../assets/railway (2).jpg';
+import Railway3 from '../assets/railway (3).jpg';
+import Railway4 from '../assets/railway (4).jpg';
+import Railway5 from '../assets/railway (5).jpg';
+import Railway6 from '../assets/railway (6).jpg';
 
 
 function Destination() {
@@ -16,27 +16,27 @@ function Destination() {
         <p>Discover and embark on your ideal adventure.</p>
         <DestinationData
         className = "first-des"
-        heading = "Golden Gate Bridge , USA"
-        text = "The iconic Golden Gate Bridge in San Francisco is a marvel of engineering and a symbol of the city. Spanning the entrance to San Francisco Bay, it offers breathtaking views and a piece of history you won't want to miss during your visit."
-        image1 = {GoldenGate1}
-        image2 = {GoldenGate2}      
+        heading = "The Hill Country Railway"
+        text = "For those seeking an exceptional railway adventure, the Hill Country Railway in Sri Lanka is a must-experience journey. This rail route meanders through the central highlands of the island, where the air is cool, and the landscape is dominated by lush tea plantations"
+        image1 = {Railway1}
+        image2 = {Railway2}      
         />
 
        <DestinationData
         className = "first-des-reverse"
-        heading = "Discover Rome's Rich Heritage, Italy"
-        text = "Explore the timeless city of Rome, where history and culture blend seamlessly. From the awe-inspiring Colosseum to the historic streets of the Vatican, immerse yourself in centuries of art, architecture, and ancient wonders.        "
-        image1 = {Rome1}
-        image2 = {Rome2}      
+        heading = "Journey Through Time and Nature"
+        text = "Nestled in the heart of the Indian Ocean, Sri Lanka is a tropical paradise renowned for its stunning natural beauty. With pristine beaches, lush forests, and picturesque landscapes, the island offers a diverse array of landscapes, from golden sands along the coast to misty highlands shrouded in emerald green"
+        image1 = {Railway5}
+        image2 = {Railway6}      
        />
 
 
        <DestinationData
        className = "first-des"
-       heading = "Experience London, UK"
-       text = "Explore the vibrant city of London, UK. With its iconic landmarks like Big Ben and the Tower Bridge, world-class museums, and diverse neighborhoods, London offers a blend of history, culture, and modernity that will captivate your senses."
-       image1 = {Lodon1}
-       image2 = {Lodon2}      
+       heading = "The Mesmerizing Beauty of the Island Paradise"
+       text = "The Sri Lankan railway network is an enchanting experience that seamlessly combines history, culture, and natural beauty. Traversing through the island, this railway system takes travelers on a journey through time, as they wind their way through colonial-era train stations and lush, evergreen landscapes"
+       image1 = {Railway3}
+       image2 = {Railway4}      
 />
 
     </div>

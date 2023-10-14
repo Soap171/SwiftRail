@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Menuitems } from './Menuitems';
 import './Footer.css';
 
 function Footer() {
@@ -23,7 +22,7 @@ function Footer() {
 
             <div className="mb-4">
               <h5>Contact Us</h5>
-              <p>Email: contact@travelpulse.com</p>
+              <p>Email: contact@SwiftRail.com</p>
               <p>Phone: +1 (123) 456-7890</p>
             </div>
           </div>
@@ -32,13 +31,27 @@ function Footer() {
             <div className="mb-4">
               <h5>Quick Links</h5>
               <ul className="list-unstyled">
-              {Menuitems.map((item, index) => (
-              <li key={index}>
-                <Link  to={item.url} className="footer-link">
-                  {item.title}
-                </Link>
-              </li>
-            ))}
+                <li>
+                  <Link to="/Home" className="footer-link">
+                    Home
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/About" className="footer-link">
+                    About
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Contact" className='footer-link'>
+                    Contact
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/Service" className="footer-link">
+                    Service
+                  </Link>
+                </li>
+                {/* Add more individual Link items as needed */}
               </ul>
             </div>
           </div>
@@ -49,7 +62,7 @@ function Footer() {
               <form>
                 <div className="input-group">
                   <input type="email" className="form-control" placeholder="Enter your email" />
-                  <button className="btn btn-primary" type="button">Subscribe</button>
+                  <button className="btn btn-success" type="button">Subscribe</button>
                 </div>
               </form>
             </div>
@@ -57,7 +70,7 @@ function Footer() {
         </div>
 
         <div className="text-center">
-          <p>&copy; {new Date().getFullYear()} TravelPulse. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} SwiftRail. All rights reserved.</p>
         </div>
       </div>
     </footer>

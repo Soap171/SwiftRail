@@ -5,7 +5,6 @@ import ContactImg from '../assets/contact.jpg';
 import Footer from '../components/Footer';
 
 function Contact() {
-  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -13,10 +12,8 @@ function Contact() {
     message: '',
   });
 
-  
   const [alert, setAlert] = useState(null);
 
-  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -34,7 +31,6 @@ function Contact() {
         message: 'Please fill in all fields.',
       });
     } else {
-
       setFormData({
         name: '',
         email: '',
@@ -49,10 +45,20 @@ function Contact() {
     }
   };
 
+  const handleClearForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      subject: '',
+      message: '',
+    });
+    setAlert(null);
+  };
+
   return (
     <>
       <Navbar />
-      <Hero cName="hero-other" heroImg={ContactImg} title="Contact" />
+      <Hero cName="hero-other" heroImg={ContactImg} title="Contact" text="Contact Us If You Need To Know Anything" />
 
       <div className="container mt-5">
         <div className="row justify-content-center">
@@ -120,9 +126,22 @@ function Contact() {
                   required
                 ></textarea>
               </div>
-              <button type="submit" className="btn btn-primary mb-3">
-                 Submit
+              <div className="row mb-3">
+               <div className="col">
+                <button type="submit" className="btn btn-primary w-100">
+                  Submit
+                </button>
+              </div>
+              <div className="col mt-3">
+               <button
+                type="button"
+                className="btn btn-secondary w-100"
+                onClick={handleClearForm}
+                >
+                Clear
               </button>
+             </div>
+           </div>
             </form>
           </div>
         </div>

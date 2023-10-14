@@ -1,21 +1,24 @@
 import React from 'react'
 import './Services.css'
 import ServicesData from './ServicesData'
-import Guide from '../assets/Guide.jpg'
-import Booking from '../assets/Booking.jpg'
-import Consultant from '../assets/Consultant.jpg'
+import Schedules from '../assets/Schedules.jpg'
+import QR from '../assets/QR.jpg'
+import Parcel from '../assets/Parcel.jpg'
 
 function Services() {
   return (
     <div className='services'>
         <h1>Our Services</h1>
-        <p>We're dedicated to creating unforgettable travel experiences. From expert guides to curated packages, our services cater to your every need. Explore with us and make unforgettable global memories.</p>
+        <p>Streamlined Train Transportation Services at Your Fingertips! Discover the Convenience of QR Ticketing,
+           Parcel Booking, and Real-Time Schedules with swfitrail. Whether you're a frequent traveler or a business
+            in need of reliable shipping solutions, swfitrail is your go-to platform for hassle-free train transportation services.
+           Explore our range of features designed to make your train journeys and parcel shipments more efficient and enjoyable.</p>
       <div className='service-card'>
        <ServicesData
        
-        image= {Guide}
-        heading = "Guided Tours"
-        text = "Explore the world with our knowledgeable guides who will lead you through the best destinations, ensuring an enriching travel experience."
+        image= {Schedules}
+        heading = "Train Schedules"
+        text = "Stay On Track with Train Schedules: Easily access train schedules from your location to your destination on swfitrail. Plan your journeys efficiently and set up SMS notifications for specific train arrivals and departures. Never miss a train again – swfitrail keeps you informed and on time"
         title = "Schedules"
         link = "/Schedules"
        
@@ -23,11 +26,11 @@ function Services() {
 
       <ServicesData
        
-       image= {Booking}
-       heading = "Accommodation Booking"
-       text = "Find the perfect place to stay with our wide range of accommodation options, from luxury hotels to cozy cottages."
+       image= {QR}
+       heading = "QR Tickets"
+       text = "Experience Ultimate Convenience: Our QR Ticket Subscription Plans simplify train travel. No more ticket hassles. Choose from flexible options daily, monthly, or long-term. Enjoy quick, paperless ticketing and journey hassle-free with swfitrail! Join today!"
        title = "Subscriptions"
-       link = "Subscriptions"
+       link = "/Subscriptions"
        
       
       />
@@ -35,11 +38,11 @@ function Services() {
 
       <ServicesData
        
-       image= {Consultant}
-       heading = "Travel Consultation"
-       text = "Receive expert advice and travel tips from our experienced consultants, helping you plan the perfect getaway."
+       image= {Parcel}
+       heading = "Parcel Bookings"
+       text = "Simplify Parcel Booking Online: Enjoy the convenience of booking parcels online with swfitrail. Easily arrange shipments from your home or office using our user-friendly platform. Send parcels to your preferred destinations effortlessly. Trust swfitrail for efficient online parcel booking."
        title = "Parcel Booking"
-       link = "ParcelBookings"
+       link = "/Booking"
       />
 
       </div>
