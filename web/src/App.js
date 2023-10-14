@@ -13,7 +13,7 @@ import CheckoutPopup from './routes/CheckoutPopup';
 import Profile from './routes/Profile';
 
 function App() {
-  const isAuthenticated = /* Check if the user is authenticated, e.g., from state or context */ false;
+  const isAuthenticated = /* Check if the user is authenticated, e.g., from state or context */ true;
 
   return (
     <div className="App">
@@ -22,7 +22,7 @@ function App() {
         <Route path="/About" element={<About />} />
         <Route path="/Service" element={<Service />} />
         <Route path="/Contact" element={<Contact />} />
-        <Route path="/Schedules" element={<Schedules />} />
+        <Route path="/Schedules" element={<Schedules isAuthenticated={isAuthenticated} />} />
         <Route path="/Login" element={<Login />} />
         <Route path="/SignUp" element={<SignUp />} />
         <Route path="/CheckoutPopup" element={<CheckoutPopup />} />
