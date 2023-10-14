@@ -10,6 +10,7 @@ import SignUp from './routes/SignUp'
 import Booking from './routes/Booking';
 import Subscriptions from './routes/Subscriptions';
 import CheckoutPopup from './routes/CheckoutPopup';
+import Profile from './routes/Profile';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/About" element={ <About/>}/>
         <Route path="/Schedules" element={ <Schedules/>}/>
         <Route path="/Login" element={ <Login/>}/>
+        <Route path="/Profile" element={ <Profile/>}/>
         <Route path="/SignUp" element={ <SignUp/>}/>
         <Route path="/Booking" element={ <Booking/>}/>
         <Route path="/Subscriptions" element={ <Subscriptions/>}/>
