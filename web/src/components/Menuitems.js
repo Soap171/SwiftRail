@@ -22,6 +22,14 @@ export const  Menuitems = [
  },
 
  {
+   title : "My Account",
+   url : "/Profile",
+   cName : "nav-links",
+   icon : "fa fa-user-circle"
+},
+
+
+ {
     title : "Contact",
     url : "/Contact",
     cName : "nav-links",

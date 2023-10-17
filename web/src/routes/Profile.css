@@ -1,0 +1,35 @@
+/* Profile.css */
+
+/* Apply responsive styles for different screen sizes */
+.profile-container {
+  padding: 20px;
+}
+
+.profile-card {
+  margin-top: 20px;
+  border: 1px solid #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(to bottom, #01959a, #ffffff);
+}
+
+/* Style the "Parcel Bookings" section with a gradient background */
+.parcel-card {
+  background: linear-gradient(to bottom, #01959a, #ffffff);
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive styles for different screen sizes */
+@media (max-width: 768px) {
+  .profile-container {
+    padding: 10px;
+  }
+  .profile-card {
+    margin-top: 10px;
+  }
+  .parcel-card {
+    padding: 10px;
+  }
+}

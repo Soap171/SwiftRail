@@ -1,0 +1,17 @@
+.background {
+    background-image: url('../assets/login.jpg'); /* Replace with your image URL */
+    background-size: cover;
+    background-position: center;
+    height: 100vh; /* Make the background cover the entire viewport height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .signup-container {
+    background-color: rgba(255, 255, 255, 0.8); /* Add a semi-transparent background to the form container */
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px; /* Adjust the width as needed */
+  }
+  

@@ -1,16 +1,14 @@
-import '../components/Button.css'
-import Footer from '../components/Footer'
-import Hero from '../components/Hero'
-import Navbar from '../components/Navbar'
-import ScheduleImg from '../assets/Schedule.jpg'
+import '../components/Button.css';
+import Footer from '../components/Footer';
+import Hero from '../components/Hero';
+import Navbar from '../components/Navbar';
+import ScheduleImg from '../assets/Schedule.jpg';
 import Select from 'react-select';
 import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
 
-
-
-function Schedules() {
+function Schedules({ isAuthenticated }) {
   const [currentStation, setCurrentStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [schedules, setSchedules] = useState([]);
@@ -49,8 +47,14 @@ function Schedules() {
   };
 
   const handleNotify = (scheduleId) => {
-    openModal();
-    // Additional logic to handle notifications here
+    if (isAuthenticated == false) {
+      // User is not authenticated, handle the unauthenticated case (e.g., show an error message or redirect to login).
+      setValidationError('You must be logged in to use the Notify feature.');
+    } else {
+      // User is authenticated, continue with the notification logic.
+      openModal();
+      // Additional logic to handle notifications here
+    }
   };
 
   const handleNotification = () => {
@@ -69,6 +73,8 @@ function Schedules() {
     const phonePattern = /^[0-9]{10}$/; // Modify the pattern according to your requirements
     return phonePattern.test(phoneNumber);
   };
+
+
 
   const dummySchedules = [
     {
@@ -92,11 +98,8 @@ function Schedules() {
     { value: 'station3', label: 'Station 3' },
     // Add more station options here
   ];
-
-
- 
-
   return (
+   
     <div>
       <Navbar />
       <Hero cName="hero-other" heroImg={ScheduleImg} title="Easy Find Train Schedules" />
@@ -204,3 +207,5 @@ function Schedules() {
 }
 
 export default Schedules;
+
+          

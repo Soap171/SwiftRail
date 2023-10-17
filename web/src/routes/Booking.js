@@ -8,7 +8,6 @@ import '../components/Button.css'
 export default function Booking() {
   const [formData, setFormData] = useState({
     senderName: '',
-    senderAddress: '',
     senderPhone: '',
     senderNIC: '',
     senderRailwayStation: '',
@@ -34,9 +33,7 @@ export default function Booking() {
     if (!formData.senderName) {
       errors.senderName = 'Sender Name is required';
     }
-    if (!formData.senderAddress) {
-      errors.senderAddress = 'Sender Address is required';
-    }
+  
     if (!formData.senderPhone) {
       errors.senderPhone = 'Sender Phone is required';
     } else if (!/^\d{10}$/.test(formData.senderPhone)) {
@@ -104,19 +101,6 @@ export default function Booking() {
             />
             {errors.senderName && (
               <div className="invalid-feedback">{errors.senderName}</div>
-            )}
-          </div>
-          <div className="form-group mt-2">
-            <input
-              type="text"
-              className={`form-control ${errors.senderAddress && 'is-invalid'}`}
-              name="senderAddress"
-              placeholder="Sender's Address"
-              value={formData.senderAddress}
-              onChange={handleInputChange}
-            />
-            {errors.senderAddress && (
-              <div className="invalid-feedback">{errors.senderAddress}</div>
             )}
           </div>
           <div className="form-group mt-2">

@@ -37,4 +37,3 @@ class Navbar extends Component {
 }
 
 export default Navbar;
-<h1 className='Navbar-logo'></h1>
