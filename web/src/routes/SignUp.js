@@ -6,7 +6,7 @@ import './SignUp.css';
 function SignUp() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    fullName: '',
+    NIC: '',
     username: '',
     password: '',
     address: '',
@@ -44,11 +44,11 @@ function SignUp() {
         <Form onSubmit={handleSubmit}>
           <h2>Sign Up</h2>
           <Form.Group>
-            <Form.Label>Full Name</Form.Label>
+            <Form.Label>NIC</Form.Label>
             <Form.Control
               type="text"
-              name="fullName"
-              value={formData.fullName}
+              name="NIC"
+              value={formData.NIC}
               onChange={handleChange}
               required
             />

@@ -36,17 +36,7 @@ function CheckoutPopup() {
       errors.email = 'Email is required';
     }
 
-    if (!formData.address) {
-      errors.address = 'Address is required';
-    }
-
-    if (!formData.city) {
-      errors.city = 'City is required';
-    }
-
-    if (!formData.zip) {
-      errors.zip = 'ZIP Code is required';
-    }
+  
 
     if (!formData.cardNumber) {
       errors.cardNumber = 'Card Number is required';
@@ -115,39 +105,6 @@ function CheckoutPopup() {
                       onChange={handleInputChange}
                     />
                     {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="address">Address</label>
-                    <input
-                      type="text"
-                      className={`form-control ${formErrors.address ? 'is-invalid' : ''}`}
-                      id="address"
-                      name="address"
-                      onChange={handleInputChange}
-                    />
-                    {formErrors.address && <div className="invalid-feedback">{formErrors.address}</div>}
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="city">City</label>
-                    <input
-                      type="text"
-                      className={`form-control ${formErrors.city ? 'is-invalid' : ''}`}
-                      id="city"
-                      name="city"
-                      onChange={handleInputChange}
-                    />
-                    {formErrors.city && <div className="invalid-feedback">{formErrors.city}</div>}
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="zip">ZIP Code</label>
-                    <input
-                      type="text"
-                      className={`form-control ${formErrors.zip ? 'is-invalid' : ''}`}
-                      id="zip"
-                      name="zip"
-                      onChange={handleInputChange}
-                    />
-                    {formErrors.zip && <div className="invalid-feedback">{formErrors.zip}</div>}
                   </div>
                 </form>
               </div>
