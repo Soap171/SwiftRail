@@ -1,6 +1,6 @@
 // Login.js
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import './Login.css'
 
@@ -67,7 +67,7 @@ function Login() {
         </div>
       </div>
       <div className="contact-button">
-        <button className="btn btn-secondary btn-lg">Contact Us</button>
+        <Link to="mailto:spiyumal48@gmail.com" className='btn btn secondary btn-lg'>Contact</Link>
       </div>
     </div>
   );
