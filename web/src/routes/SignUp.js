@@ -11,6 +11,7 @@ function SignUp() {
     password: '',
     address: '',
     contactNumber: '',
+    email:''
   });
   const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the success modal
 
@@ -89,6 +90,16 @@ function SignUp() {
               type="tel"
               name="contactNumber"
               value={formData.contactNumber}
+              onChange={handleChange}
+              required
+            />
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Email</Form.Label>
+            <Form.Control
+              type="email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
