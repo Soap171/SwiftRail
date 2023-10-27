@@ -7,18 +7,38 @@ const Userdetails = () => {
     const { userData, logout } = useAuth();
     const navigate = useNavigate();
     const [userDetails, setUserDetails] = useState(null);
+    const [editableFields, setEditableFields] = useState({
+        contactNo: false,
+        address: false,
+        email: false,
+    });
 
     const handleLogout = () => {
-        logout(); // Call the logout function from the context
-        navigate('/'); // Redirect to the home page after logout
+        logout();
+        navigate('/');
+    };
+
+    const updateField = async (field) => {
+        const updates = {
+            [field]: userDetails[field],
+        };
+        const { data, error } = await supabase
+            .from('customer')
+            .update(updates)
+            .eq('NIC', userData.NIC);
+
+        if (error) {
+            console.error('Error updating the field:', error);
+        } else if (data) {
+            console.log('Field updated successfully');
+            setEditableFields({ ...editableFields, [field]: false });
+        }
     };
 
     useEffect(() => {
         const fetchUserDetails = async () => {
-            // Check if the user is logged in
             if (!userData) return;
 
-            // Fetch user details from the Supabase database based on their NIC
             const { data, error } = await supabase
                 .from('customer')
                 .select('NIC, userName, contactNo, address, email')
@@ -57,11 +77,73 @@ const Userdetails = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">Contact Number</label>
-                                        <input type="text" className="form-control" value={userDetails?.contactNo || ''} readOnly />
+                                        {editableFields.contactNo ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    value={userDetails?.contactNo || ''}
+                                                    onChange={(e) =>
+                                                        setUserDetails({ ...userDetails, contactNo: e.target.value })
+                                                    }
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() => updateField('contactNo')}
+                                                >
+                                                    Save
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <input type="text" className="form-control" value={userDetails?.contactNo || ''} readOnly />
+                                                {editableFields.contactNo === false && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-secondary"
+                                                        onClick={() => setEditableFields({ ...editableFields, contactNo: true })}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                     <div className="col-md-12">
                                         <label className="form-label">Address</label>
-                                        <input type="text" className="form-control" value={userDetails?.address || ''} readOnly />
+                                        {editableFields.address ? (
+                                            <>
+                                                <input
+                                                    type="text"
+                                                    className="form-control"
+                                                    value={userDetails?.address || ''}
+                                                    onChange={(e) =>
+                                                        setUserDetails({ ...userDetails, address: e.target.value })
+                                                    }
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() => updateField('address')}
+                                                >
+                                                    Save
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <input type="text" className="form-control" value={userDetails?.address || ''} readOnly />
+                                                {editableFields.address === false && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-secondary"
+                                                        onClick={() => setEditableFields({ ...editableFields, address: true })}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">NIC</label>
@@ -69,9 +151,42 @@ const Userdetails = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">Email</label>
-                                        <input type="email" className="form-control" value={userDetails?.email || ''} readOnly />
+                                        {editableFields.email ? (
+                                            <>
+                                                <input
+                                                    type="email"
+                                                    className="form-control"
+                                                    value={userDetails?.email || ''}
+                                                    onChange={(e) =>
+                                                        setUserDetails({ ...userDetails, email: e.target.value })
+                                                    }
+                                                />
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-primary"
+                                                    onClick={() => updateField('email')}
+                                                >
+                                                    Save
+                                                </button>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <input type="email" className="form-control" value={userDetails?.email || ''} readOnly />
+                                                {editableFields.email === false && (
+                                                    <button
+                                                        type="button"
+                                                        className="btn btn-secondary"
+                                                        onClick={() => setEditableFields({ ...editableFields, email: true })}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </>
+                                        )}
                                     </div>
-                                    <button className='btn btn-primary' onClick={handleLogout}>Log out</button>
+                                    <button className="btn btn-primary" onClick={handleLogout}>
+                                        Log out
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -80,6 +195,6 @@ const Userdetails = () => {
             </div>
         </div>
     );
-}
+};
 
 export default Userdetails;
