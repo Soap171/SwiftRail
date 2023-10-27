@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../components/AuthContext'; // Import the useAuth hook
 import 'bootstrap/dist/css/bootstrap.css';
 import './Login.css';
 import supabase from '../config/supabaseClient';
 
 function Login() {
   const navigate = useNavigate();
+  const { login } = useAuth(); // Use the login function from the AuthContext
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
@@ -25,16 +27,15 @@ function Login() {
     } else if (data) {
       // User with the provided credentials found
       // You can store the user's data in a state or context for further use
+      // Set the user as authenticated
+      login(data);
+
       // For now, navigate to the root page ('/')
       navigate('/');
     } else {
       alert('Login failed. Please check your credentials.');
     }
-  };
-
-  const handleSignUp = () => {
-    navigate('/SignUp'); // Navigate to the "SignUp" route
-  };
+  }
 
   return (
     <div className="login-container">
@@ -71,7 +72,7 @@ function Login() {
                 <button type="submit" className="btn btn-primary">
                   Login
                 </button>
-                <button type="button" className="btn btn-secondary" onClick={handleSignUp}>
+                <button type="button" className="btn btn-secondary" onClick={() => navigate('/SignUp')}>
                   Sign Up
                 </button>
               </div>
