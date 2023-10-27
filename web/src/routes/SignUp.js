@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Container, Form, Button, Modal } from 'react-bootstrap'; // Import Modal
+import { Container, Form, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
+import supabase from '../config/supabaseClient';
 
 function SignUp() {
   const navigate = useNavigate();
@@ -11,9 +12,9 @@ function SignUp() {
     password: '',
     address: '',
     contactNumber: '',
-    email:''
+    email: '',
   });
-  const [showSuccessModal, setShowSuccessModal] = useState(false); // State for the success modal
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,19 +24,35 @@ function SignUp() {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // You can handle form submission here
-    console.log(formData);
 
-    // Show the success modal
-    setShowSuccessModal(true);
+    // Send the user data to Supabase for registration
+    try {
+      const { data, error } = await supabase.from('customer').upsert([
+        {
+          NIC: formData.NIC,
+          userName: formData.username,
+          password: formData.password,
+          address: formData.address,
+          contactNo: formData.contactNumber,
+          email: formData.email,
+        },
+      ]);
+
+      if (error) {
+        console.error('Error signing up:', error);
+      } else {
+        // Show the success modal
+        setShowSuccessModal(true);
+      }
+    } catch (error) {
+      console.error('Error signing up:', error);
+    }
   };
 
-  // Function to close the success modal
   const handleCloseSuccessModal = () => {
     setShowSuccessModal(false);
-    // Navigate to the login page after closing the modal
     navigate('/login');
   };
 
@@ -110,7 +127,6 @@ function SignUp() {
         </Form>
       </Container>
 
-      {/* Success Modal */}
       <Modal show={showSuccessModal} onHide={handleCloseSuccessModal}>
         <Modal.Header closeButton>
           <Modal.Title>Successfully Signed Up</Modal.Title>
