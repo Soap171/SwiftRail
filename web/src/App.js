@@ -13,7 +13,7 @@ import CheckoutPopup from './routes/CheckoutPopup';
 import Profile from './routes/Profile';
 
 function App() {
-  const isAuthenticated = /* Check if the user is authenticated, e.g., from state or context */ false;
+  const isAuthenticated = /* Check if the user is authenticated, e.g., from state or context */ true;
 
   return (
     <div className="App">
