@@ -1,19 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
+import supabase from '../config/supabaseClient';
 
 const Userdetails = () => {
     const { userData, logout } = useAuth();
     const navigate = useNavigate();
-
-    if (!userData) {
-        return <div>Loading...</div>;
-    }
+    const [userDetails, setUserDetails] = useState(null);
 
     const handleLogout = () => {
         logout(); // Call the logout function from the context
         navigate('/'); // Redirect to the home page after logout
     };
+
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            // Check if the user is logged in
+            if (!userData) return;
+
+            // Fetch user details from the Supabase database based on their NIC
+            const { data, error } = await supabase
+                .from('customer')
+                .select('NIC, userName, contactNo, address, email')
+                .eq('NIC', userData.NIC)
+                .single();
+
+            if (error) {
+                console.error('Error fetching user details:', error);
+            } else if (data) {
+                setUserDetails(data);
+            }
+        };
+
+        fetchUserDetails();
+    }, [userData]);
 
     return (
         <div className="container light-style flex-grow-1 container-p-y">
@@ -37,19 +57,19 @@ const Userdetails = () => {
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">Contact Number</label>
-                                        <input type="text" className="form-control" value={userData.contactNo} />
+                                        <input type="text" className="form-control" value={userDetails?.contactNo || ''} readOnly />
                                     </div>
                                     <div className="col-md-12">
                                         <label className="form-label">Address</label>
-                                        <input type="text" className="form-control" value={userData.address} />
+                                        <input type="text" className="form-control" value={userDetails?.address || ''} readOnly />
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">NIC</label>
-                                        <input type="text" className="form-control" value={userData.NIC} />
+                                        <input type="text" className="form-control" value={userDetails?.NIC || ''} readOnly />
                                     </div>
                                     <div className="col-md-6">
                                         <label className="form-label">Email</label>
-                                        <input type="email" className="form-control" value={userData.email} />
+                                        <input type="email" className="form-control" value={userDetails?.email || ''} readOnly />
                                     </div>
                                     <button className='btn btn-primary' onClick={handleLogout}>Log out</button>
                                 </form>
