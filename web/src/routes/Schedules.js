@@ -39,6 +39,25 @@ function Schedules({ isAuthenticated }) {
     fetchStations();
   }, []);
 
+  const fetchTrainName = async (trainId) => {
+    try {
+      const { data: trainData, error: trainError } = await supabase
+        .from('train')
+        .select('name')
+        .eq('trainId', trainId);
+  
+      if (trainError) {
+        console.error('Error fetching train name:', trainError);
+        return 'Unknown';
+      } else {
+        return trainData[0]?.name || 'Unknown';
+      }
+    } catch (error) {
+      console.error('Error in fetching train name:', error);
+      return 'Unknown';
+    }
+  };
+
   const handleSearch = async () => {
     if (!currentStation || !destinationStation) {
       setValidationError('Please select both Current and Destination Stations.');
@@ -52,12 +71,16 @@ function Schedules({ isAuthenticated }) {
         .from('schedule')
         .select('*')
         .eq('stationId', currentStation.value)
-        .ilike('finalDestination', destinationStation.label); // Using ilike for case-insensitive search
+        .ilike('finalDestination', destinationStation.label);
   
       if (scheduleError) {
         console.error('Error fetching schedules:', scheduleError);
       } else {
-        setSchedules(scheduleData);
+        const schedulesWithTrainName = await Promise.all(scheduleData.map(async (schedule) => {
+          const trainName = await fetchTrainName(schedule.trainId);
+          return { ...schedule, trainName };
+        }));
+        setSchedules(schedulesWithTrainName);
       }
     } catch (error) {
       console.error('Error in fetching schedules:', error);
@@ -106,18 +129,18 @@ function Schedules({ isAuthenticated }) {
           <table className="table">
             <thead>
               <tr>
-                <th>Train ID</th>
+                <th>Train Name</th>
                 <th>Departure</th>
                 <th>Arrival</th>
                 {/* Add more table headers based on your schedule data */}
               </tr>
             </thead>
             <tbody>
-              {schedules.map(schedule => (
-                <tr key={schedule.id}>
-                  <td>{schedule.trainId}</td>
-                  <td>{schedule.departureTime}</td>
-                  <td>{schedule.arrivalTime}</td>
+              {schedules.map((scheduleItem, index) => (
+                <tr key={index}>
+                  <td>{scheduleItem.trainName}</td>
+                  <td>{scheduleItem.departureTime}</td>
+                  <td>{scheduleItem.arrivalTime}</td>
                   {/* Add more table cells based on your schedule data */}
                 </tr>
               ))}
