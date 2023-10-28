@@ -67,25 +67,40 @@ function Schedules({ isAuthenticated }) {
     setValidationError('');
   
     try {
-      const { data: scheduleData, error: scheduleError } = await supabase
+      const { data: scheduleDataFinalDest, error: finalDestError } = await supabase
         .from('schedule')
         .select('*')
         .eq('stationId', currentStation.value)
         .ilike('finalDestination', destinationStation.label);
   
-      if (scheduleError) {
-        console.error('Error fetching schedules:', scheduleError);
+      const { data: allScheduleData, error: allSchedulesError } = await supabase
+        .from('schedule')
+        .select('*')
+        .eq('stationId', currentStation.value);
+  
+      if (finalDestError || allSchedulesError) {
+        console.error('Error fetching schedules:', finalDestError || allSchedulesError);
       } else {
-        const schedulesWithTrainName = await Promise.all(scheduleData.map(async (schedule) => {
+        const filteredSchedules = allScheduleData.filter((schedule) =>
+          schedule.stopStations && 
+          schedule.stopStations.some(station => 
+            station.toLowerCase().includes(destinationStation.label.toLowerCase())
+          )
+        );
+  
+        const schedulesWithTrainName = await Promise.all(filteredSchedules.map(async (schedule) => {
           const trainName = await fetchTrainName(schedule.trainId);
           return { ...schedule, trainName };
         }));
-        setSchedules(schedulesWithTrainName);
+  
+        const mergedSchedules = [...scheduleDataFinalDest, ...schedulesWithTrainName];
+        setSchedules(mergedSchedules);
       }
     } catch (error) {
       console.error('Error in fetching schedules:', error);
     }
   };
+  
 
   return (
     <div>
