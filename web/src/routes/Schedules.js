@@ -5,8 +5,11 @@ import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import ScheduleImg from '../assets/Schedule.jpg';
+import { useAuth } from '../components/AuthContext';
 
-function Schedules({ isAuthenticated }) {
+function Schedules() {
+
+  const { isAuthenticated } = useAuth(); // Fetching isAuthenticated status 
   const [currentStation, setCurrentStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [schedules, setSchedules] = useState([]);
@@ -58,49 +61,56 @@ function Schedules({ isAuthenticated }) {
     }
   };
 
-  const handleSearch = async () => {
-    if (!currentStation || !destinationStation) {
-      setValidationError('Please select both Current and Destination Stations.');
-      return;
+  // Inside the handleSearch function
+const handleSearch = async () => {
+  if (!currentStation || !destinationStation) {
+    setValidationError('Please select both Current and Destination Stations.');
+    return;
+  }
+
+  setValidationError('');
+
+  try {
+    const { data: scheduleDataFinalDest, error: finalDestError } = await supabase
+      .from('schedule')
+      .select('*')
+      .eq('stationId', currentStation.value)
+      .ilike('finalDestination', destinationStation.label);
+
+    const { data: allScheduleData, error: allSchedulesError } = await supabase
+      .from('schedule')
+      .select('*')
+      .eq('stationId', currentStation.value);
+
+    if (finalDestError || allSchedulesError) {
+      console.error('Error fetching schedules:', finalDestError || allSchedulesError);
+    } else {
+      const filteredSchedules = allScheduleData.filter((schedule) =>
+        schedule.stopStations &&
+        schedule.stopStations.some((station) =>
+          station.toLowerCase().includes(destinationStation.label.toLowerCase())
+        )
+      );
+
+      const allSchedules = [...scheduleDataFinalDest, ...filteredSchedules];
+      const schedulesWithTrainNames = await Promise.all(allSchedules.map(async (schedule) => {
+        const trainName = await fetchTrainName(schedule.trainId);
+        return { ...schedule, trainName };
+      }));
+
+      setSchedules(schedulesWithTrainNames);
     }
-  
-    setValidationError('');
-  
-    try {
-      const { data: scheduleDataFinalDest, error: finalDestError } = await supabase
-        .from('schedule')
-        .select('*')
-        .eq('stationId', currentStation.value)
-        .ilike('finalDestination', destinationStation.label);
-  
-      const { data: allScheduleData, error: allSchedulesError } = await supabase
-        .from('schedule')
-        .select('*')
-        .eq('stationId', currentStation.value);
-  
-      if (finalDestError || allSchedulesError) {
-        console.error('Error fetching schedules:', finalDestError || allSchedulesError);
-      } else {
-        const filteredSchedules = allScheduleData.filter((schedule) =>
-          schedule.stopStations && 
-          schedule.stopStations.some(station => 
-            station.toLowerCase().includes(destinationStation.label.toLowerCase())
-          )
-        );
-  
-        const schedulesWithTrainName = await Promise.all(filteredSchedules.map(async (schedule) => {
-          const trainName = await fetchTrainName(schedule.trainId);
-          return { ...schedule, trainName };
-        }));
-  
-        const mergedSchedules = [...scheduleDataFinalDest, ...schedulesWithTrainName];
-        setSchedules(mergedSchedules);
-      }
-    } catch (error) {
-      console.error('Error in fetching schedules:', error);
-    }
-  };
-  
+  } catch (error) {
+    console.error('Error in fetching schedules:', error);
+  }
+};
+
+const handleNotify = (scheduleItem) => {
+  // Logic to handle notification (to be implemented)
+  console.log('Notify button clicked for schedule:', scheduleItem);
+};
+
+
 
   return (
     <div>
@@ -156,7 +166,11 @@ function Schedules({ isAuthenticated }) {
                   <td>{scheduleItem.trainName}</td>
                   <td>{scheduleItem.departureTime}</td>
                   <td>{scheduleItem.arrivalTime}</td>
-                  {/* Add more table cells based on your schedule data */}
+                  <td>
+                    {isAuthenticated && ( // Show button only for authenticated users
+                      <button className="btn btn-danger"onClick={() => handleNotify(scheduleItem)}>Notify</button>
+                    )}
+                  </td>
                 </tr>
               ))}
             </tbody>
