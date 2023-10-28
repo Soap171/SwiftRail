@@ -6,9 +6,9 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import ScheduleImg from '../assets/Schedule.jpg';
 import { useAuth } from '../components/AuthContext';
+import Modal from 'react-modal'; // Import the Modal component
 
 function Schedules() {
-
   const { isAuthenticated } = useAuth(); // Fetching isAuthenticated status 
   const [currentStation, setCurrentStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
@@ -16,6 +16,9 @@ function Schedules() {
   const [validationError, setValidationError] = useState('');
   const [currentStationOptions, setCurrentStationOptions] = useState([]);
   const [destinationStationOptions, setDestinationStationOptions] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [mobileNumber, setMobileNumber] = useState('');
+  const [isInputValid, setInputValid] = useState(true); // State to manage input validation
 
   useEffect(() => {
     async function fetchStations() {
@@ -61,56 +64,68 @@ function Schedules() {
     }
   };
 
-  // Inside the handleSearch function
-const handleSearch = async () => {
-  if (!currentStation || !destinationStation) {
-    setValidationError('Please select both Current and Destination Stations.');
-    return;
-  }
-
-  setValidationError('');
-
-  try {
-    const { data: scheduleDataFinalDest, error: finalDestError } = await supabase
-      .from('schedule')
-      .select('*')
-      .eq('stationId', currentStation.value)
-      .ilike('finalDestination', destinationStation.label);
-
-    const { data: allScheduleData, error: allSchedulesError } = await supabase
-      .from('schedule')
-      .select('*')
-      .eq('stationId', currentStation.value);
-
-    if (finalDestError || allSchedulesError) {
-      console.error('Error fetching schedules:', finalDestError || allSchedulesError);
-    } else {
-      const filteredSchedules = allScheduleData.filter((schedule) =>
-        schedule.stopStations &&
-        schedule.stopStations.some((station) =>
-          station.toLowerCase().includes(destinationStation.label.toLowerCase())
-        )
-      );
-
-      const allSchedules = [...scheduleDataFinalDest, ...filteredSchedules];
-      const schedulesWithTrainNames = await Promise.all(allSchedules.map(async (schedule) => {
-        const trainName = await fetchTrainName(schedule.trainId);
-        return { ...schedule, trainName };
-      }));
-
-      setSchedules(schedulesWithTrainNames);
+  const handleSearch = async () => {
+    if (!currentStation || !destinationStation) {
+      setValidationError('Please select both Current and Destination Stations.');
+      return;
     }
-  } catch (error) {
-    console.error('Error in fetching schedules:', error);
-  }
-};
 
-const handleNotify = (scheduleItem) => {
-  // Logic to handle notification (to be implemented)
-  console.log('Notify button clicked for schedule:', scheduleItem);
-};
+    setValidationError('');
 
+    try {
+      const { data: scheduleDataFinalDest, error: finalDestError } = await supabase
+        .from('schedule')
+        .select('*')
+        .eq('stationId', currentStation.value)
+        .ilike('finalDestination', destinationStation.label);
 
+      const { data: allScheduleData, error: allSchedulesError } = await supabase
+        .from('schedule')
+        .select('*')
+        .eq('stationId', currentStation.value);
+
+      if (finalDestError || allSchedulesError) {
+        console.error('Error fetching schedules:', finalDestError || allSchedulesError);
+      } else {
+        const filteredSchedules = allScheduleData.filter((schedule) =>
+          schedule.stopStations &&
+          schedule.stopStations.some((station) =>
+            station.toLowerCase().includes(destinationStation.label.toLowerCase())
+          )
+        );
+
+        const allSchedules = [...scheduleDataFinalDest, ...filteredSchedules];
+        const schedulesWithTrainNames = await Promise.all(allSchedules.map(async (schedule) => {
+          const trainName = await fetchTrainName(schedule.trainId);
+          return { ...schedule, trainName };
+        }));
+
+        setSchedules(schedulesWithTrainNames);
+      }
+    } catch (error) {
+      console.error('Error in fetching schedules:', error);
+    }
+  };
+
+  const handleNotify = (scheduleItem) => {
+    setShowModal(true);
+    console.log('Notify button clicked for schedule:', scheduleItem);
+  };
+
+  const handleModalClose = () => {
+    setShowModal(false);
+    setMobileNumber('');
+  };
+
+  const handleMobileNumberSubmit = () => {
+    if (mobileNumber.trim() === '') {
+      setInputValid(false);
+    } else {
+      setInputValid(true);
+      alert('Submitted Mobile Number:', mobileNumber);
+      handleModalClose();
+    }
+  };
 
   return (
     <div>
@@ -148,7 +163,6 @@ const handleNotify = (scheduleItem) => {
             </button>
           </div>
         </div>
-
         <div className="mt-4">
           <h2>Fetched Schedules</h2>
           <table className="table">
@@ -167,8 +181,8 @@ const handleNotify = (scheduleItem) => {
                   <td>{scheduleItem.departureTime}</td>
                   <td>{scheduleItem.arrivalTime}</td>
                   <td>
-                    {isAuthenticated && ( // Show button only for authenticated users
-                      <button className="btn btn-danger"onClick={() => handleNotify(scheduleItem)}>Notify</button>
+                    {isAuthenticated && (
+                      <button className="btn btn-danger" onClick={() => handleNotify(scheduleItem)}>Notify</button>
                     )}
                   </td>
                 </tr>
@@ -177,6 +191,33 @@ const handleNotify = (scheduleItem) => {
           </table>
         </div>
       </div>
+      {showModal && (
+        <div className="modal-bg d-flex justify-content-center align-items-center">
+          <div className="modal-dialog">
+            <div className="modal-content">
+              <div className="modal-body">
+                <input
+                  type="text"
+                  value={mobileNumber}
+                  onChange={(e) => {
+                    setMobileNumber(e.target.value);
+                    setInputValid(true); // Reset validation on input change
+                  }}
+                  className={`form-control mb-2 ${!isInputValid ? 'is-invalid' : ''}`}
+                  placeholder="Enter your mobile number"
+                />
+                {!isInputValid && <div className="text-danger">Please enter a valid mobile number.</div>}
+                <button onClick={handleMobileNumberSubmit} className="btn btn-primary me-2 mb-3">
+                  Submit
+                </button>
+                <button onClick={handleModalClose} className="btn btn-secondary mt-3 mb-3">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <Footer />
     </div>
   );
