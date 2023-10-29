@@ -80,7 +80,7 @@ const Userdetails = () => {
 
     return (
         <div className="container light-style flex-grow-1 container-p-y">
-            <h4 className="font-weight-bold py-3 mb-4 ">
+            <h4 className="font-weight-bold py-3 mb-4">
                 Hello, {userData.userName}
             </h4>
             <div className="card overflow-hidden mb-5 bg-light.bg-gradient">
@@ -209,6 +209,9 @@ const Userdetails = () => {
                                         )}
                                     </div>
                                 </form>
+                                <button className="btn btn-danger mt-3" onClick={handleLogout}>
+                                    Log Out
+                                </button>
                             </div>
                             <div className="tab-pane fade" id="parcel-details">
                                 <div className="row g-3 p-3">
