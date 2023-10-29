@@ -108,6 +108,7 @@ export default function Booking() {
               placeholder="Sender's Name"
               value={formData.senderName}
               onChange={handleInputChange}
+             
             />
           </div>
           <div className="form-group mt-2">
@@ -118,6 +119,7 @@ export default function Booking() {
               placeholder="Sender's Phone"
               value={formData.senderPhone}
               onChange={handleInputChange}
+              required
             />
           </div>
           <div className="form-group mt-2">
@@ -134,6 +136,7 @@ export default function Booking() {
             <select
               className="form-control"
               name="senderRailwayStation"
+              required
               value={formData.senderRailwayStation}
               onChange={(e) => handleInputChange(e)}
             >
@@ -151,6 +154,7 @@ export default function Booking() {
             <select
               className="form-control"
               name="recipientRailwayStation"
+              required
               value={formData.recipientRailwayStation}
               onChange={(e) => handleInputChange(e)}
             >
@@ -167,6 +171,7 @@ export default function Booking() {
               type="text"
               className="form-control"
               name="recipientAddress"
+              required
               placeholder="Recipient's Address"
               value={formData.recipientAddress}
               onChange={handleInputChange}
@@ -178,6 +183,7 @@ export default function Booking() {
               className="form-control"
               name="recipientPhone"
               placeholder="Recipient's Phone"
+              required
               value={formData.recipientPhone}
               onChange={handleInputChange}
             />
@@ -188,6 +194,7 @@ export default function Booking() {
               className="form-control"
               name="recipientNIC"
               placeholder="Recipient's NIC"
+              required
               value={formData.recipientNIC}
               onChange={handleInputChange}
             />
@@ -199,6 +206,7 @@ export default function Booking() {
               className="form-control"
               name="inputFee"
               placeholder="Input Fee"
+              required
               value={formData.inputFee}
               onChange={handleInputChange}
             />
@@ -210,6 +218,7 @@ export default function Booking() {
               className="form-control"
               name="weight"
               placeholder="Weight"
+              required
               value={formData.weight}
               onChange={handleInputChange}
             />
@@ -221,6 +230,7 @@ export default function Booking() {
               className="form-control mt-2"
               name="parcelDescription"
               placeholder="Enter Parcel Description"
+              required
               value={formData.parcelDescription}
               onChange={handleInputChange}
             />
