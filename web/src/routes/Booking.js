@@ -21,7 +21,6 @@ export default function Booking() {
     recipientNIC: '',
     recipientRailwayStation: '',
     parcelDescription: '',
-    inputFee :'',
     weight:''
   };
 
@@ -56,7 +55,6 @@ export default function Booking() {
         .from('parcelBooking')
         .insert([
           {
-            fee: formData.inputFee,
             weight: formData.weight,
             parcelContent: formData.parcelDescription,
             senderContactNo: formData.senderPhone,
@@ -200,17 +198,7 @@ export default function Booking() {
             />
           </div>
 
-          <div className="form-group mt-2">
-            <input
-              type="text"
-              className="form-control"
-              name="inputFee"
-              placeholder="Input Fee"
-              required
-              value={formData.inputFee}
-              onChange={handleInputChange}
-            />
-          </div>
+         
           
           <div className="form-group mt-2">
             <input
