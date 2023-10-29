@@ -80,7 +80,7 @@ export default function Booking() {
           setFormData(initialFormData);
           setTimeout(() => {
             setShowSuccessAlert(false);
-          }, 3000);
+          }, 60000);
         }
       } catch (error) {
         console.error('Error:', error.message);
