@@ -66,16 +66,18 @@ export default function Booking() {
           },
         ]);
 
-      if (error) {
-        console.error('Error inserting data:', error);
-        // Handle error (e.g., display an error message)
-      } else {
-        // Data inserted successfully
-        // Handle success (e.g., show a success message)
+        if (error) {
+          console.error('Error inserting data:', error);
+          // Handle error (e.g., display an error message)
+        } else {
+          // Data inserted successfully
+          // Handle success (e.g., show a success message)
+          alert("Your booking is succesfully added")
+          formData.reset();
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
       }
-    } catch (error) {
-      console.error('Error:', error.message);
-    }
   };
 
   return (
