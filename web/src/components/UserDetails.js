@@ -83,7 +83,7 @@ const Userdetails = () => {
             <h4 className="font-weight-bold py-3 mb-4">
                 Hello, {userData.userName}
             </h4>
-            <div className="card overflow-hidden">
+            <div className="card overflow-hidden mb-5">
                 <div className="row no-gutters row-bordered row-border-light">
                     <div className="col-md-3 pt-0">
                         <div className="list-group list-group-flush account-settings-links">
