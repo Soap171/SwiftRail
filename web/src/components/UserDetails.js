@@ -125,7 +125,7 @@ const Userdetails = () => {
                                                 {editableFields.contactNo === false && (
                                                     <button
                                                         type="button"
-                                                        className="btn btn-secondary"
+                                                        className="btn btn-secondary mt-2"
                                                         onClick={() => setEditableFields({ ...editableFields, contactNo: true })}
                                                     >
                                                         Edit
@@ -160,7 +160,7 @@ const Userdetails = () => {
                                                 {editableFields.address === false && (
                                                     <button
                                                         type="button"
-                                                        className="btn btn-secondary"
+                                                        className="btn btn-secondary mt-2"
                                                         onClick={() => setEditableFields({ ...editableFields, address: true })}
                                                     >
                                                         Edit
@@ -199,7 +199,7 @@ const Userdetails = () => {
                                                 {editableFields.email === false && (
                                                     <button
                                                         type="button"
-                                                        className="btn btn-secondary"
+                                                        className="btn btn-secondary mt-2"
                                                         onClick={() => setEditableFields({ ...editableFields, email: true })}
                                                     >
                                                         Edit
