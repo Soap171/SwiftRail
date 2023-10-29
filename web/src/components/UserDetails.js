@@ -216,8 +216,8 @@ const Userdetails = () => {
                                         <div key={index} className="col-md-6">
                                             <label className="form-label">Parcel ID</label>
                                             <input type="text" className="form-control" value={booking.parcelId} readOnly />
-                                            <label className="form-label">Parcel Status</label>
-                                            <input type="text" className="form-control" value={booking.status} readOnly />
+                                            <label className="form-label mt-2">Parcel Status</label>
+                                            <input type="text" className="form-control mb-5" value={booking.status} readOnly />
                                         </div>
                                     ))}
                                 </div>
