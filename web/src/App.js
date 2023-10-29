@@ -1,5 +1,5 @@
 import './Style.css';
-import { Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate,useNavigate } from 'react-router-dom';
 import Home from './routes/Home';
 import Contact from './routes/Contact';
 import Service from './routes/Service';
@@ -12,6 +12,42 @@ import Subscriptions from './routes/Subscriptions';
 import CheckoutPopup from './routes/CheckoutPopup';
 import Profile from './routes/Profile';
 import { AuthProvider, useAuth } from './components/AuthContext';
+
+function ProfileRoute() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  if (auth.isAuthenticated) {
+    return <Profile />;
+  } else {
+    navigate('/Login');
+    return null; // Or a loading indicator while redirecting
+  }
+}
+
+function SubscriptionsRoute() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  if (auth.isAuthenticated) {
+    return <Subscriptions />;
+  } else {
+    navigate('/Login');
+    return null; // Or a loading indicator while redirecting
+  }
+}
+
+function BookingRoute() {
+  const auth = useAuth();
+  const navigate = useNavigate();
+
+  if (auth.isAuthenticated) {
+    return <Booking />;
+  } else {
+    navigate('/Login');
+    return null; // Or a loading indicator while redirecting
+  }
+}
 
 function App() {
   return (
@@ -26,28 +62,9 @@ function App() {
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
           <Route path="/CheckoutPopup" element={<CheckoutPopup />} />
-          <Route
-            path="/Profile"
-            element={
-              useAuth().isAuthenticated ? <Profile /> : <Navigate to="/Login" />
-            }
-          />
-          <Route
-            path="/Subscriptions"
-            element={
-              useAuth().isAuthenticated ? (
-                <Subscriptions />
-              ) : (
-                <Navigate to="/Login" />
-              )
-            }
-          />
-          <Route
-            path="/Booking"
-            element={
-              useAuth().isAuthenticated ? <Booking /> : <Navigate to="/Login" />
-            }
-          />
+          <Route path="/Profile" element={<ProfileRoute />} />
+        <Route path="/Subscriptions" element={<SubscriptionsRoute />} />
+        <Route path="/Booking" element={<BookingRoute />} />
         </Routes>
       </div>
    
