@@ -10,7 +10,7 @@ import { useAuth } from '../components/AuthContext';
 export default function Booking() {
   const { userData } = useAuth();
 
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     senderName: userData ? userData.userName : '',
     senderPhone: '',
     senderNIC: userData ? userData.NIC : '',
@@ -21,9 +21,13 @@ export default function Booking() {
     recipientNIC: '',
     recipientRailwayStation: '',
     parcelDescription: '',
-  });
+    inputFee :'',
+    weight:''
+  };
 
+  const [formData, setFormData] = useState(initialFormData);
   const [railwayStations, setRailwayStations] = useState([]);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
 
   useEffect(() => {
     const fetchRailwayStations = async () => {
@@ -72,8 +76,11 @@ export default function Booking() {
         } else {
           // Data inserted successfully
           // Handle success (e.g., show a success message)
-          alert("Your booking is succesfully added")
-          formData.reset();
+          setShowSuccessAlert(true);
+          setFormData(initialFormData);
+          setTimeout(() => {
+            setShowSuccessAlert(false);
+          }, 3000);
         }
       } catch (error) {
         console.error('Error:', error.message);
