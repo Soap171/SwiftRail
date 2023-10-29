@@ -12,42 +12,65 @@ import Subscriptions from './routes/Subscriptions';
 import CheckoutPopup from './routes/CheckoutPopup';
 import Profile from './routes/Profile';
 import { AuthProvider, useAuth } from './components/AuthContext';
+import React, { useEffect } from 'react';
+
+
 
 function ProfileRoute() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (auth.isAuthenticated) {
-    return <Profile />;
-  } else {
-    navigate('/Login');
-    return null; // Or a loading indicator while redirecting
+  // Use useEffect to handle authentication changes
+  React.useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate('/Login');
+    }
+  }, [auth.isAuthenticated, navigate]);
+
+  if (!auth.isAuthenticated) {
+    return null; // Or display a loading indicator while redirecting
   }
+
+  return <Profile />;
 }
 
 function SubscriptionsRoute() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (auth.isAuthenticated) {
-    return <Subscriptions />;
-  } else {
-    navigate('/Login');
-    return null; // Or a loading indicator while redirecting
+  // Use useEffect to handle authentication changes
+  React.useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate('/Login');
+    }
+  }, [auth.isAuthenticated, navigate]);
+
+  if (!auth.isAuthenticated) {
+    return null; // Or display a loading indicator while redirecting
   }
+
+  return <Subscriptions />;
 }
 
 function BookingRoute() {
   const auth = useAuth();
   const navigate = useNavigate();
 
-  if (auth.isAuthenticated) {
-    return <Booking />;
-  } else {
-    navigate('/Login');
-    return null; // Or a loading indicator while redirecting
+  // Use useEffect to handle authentication changes
+  React.useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate('/Login');
+    }
+  }, [auth.isAuthenticated, navigate]);
+
+  if (!auth.isAuthenticated) {
+    return null; // Or display a loading indicator while redirecting
   }
+
+  return <Booking />;
 }
+
+
 
 function App() {
   return (
