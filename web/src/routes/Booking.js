@@ -4,12 +4,18 @@ import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import BookingImg from '../assets/Booking.jpg';
 import '../components/Button.css'
+import supabase from '../config/supabaseClient';
+import { useAuth } from '../components/AuthContext';
+
 
 export default function Booking() {
+
+  const { userData } = useAuth(); // Assuming the user details are available in the userData object
+
   const [formData, setFormData] = useState({
-    senderName: '',
-    senderPhone: '',
-    senderNIC: '',
+    senderName: userData ? userData.userName : '',
+    senderPhone:'',
+    senderNIC:  userData ? userData.NIC : '',
     senderRailwayStation: '',
     recipientName: '',
     recipientAddress: '',
