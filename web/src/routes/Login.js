@@ -27,7 +27,7 @@ function Login() {
     } else if (data) {
       // User with the provided credentials found
       // You can store the user's data in a state or context for further use
-      // Set the user as authenticated
+      console.log(data)
       login(data);
 
       // For now, navigate to the root page ('/')

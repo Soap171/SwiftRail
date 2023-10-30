@@ -7,36 +7,35 @@ export const useAuth = () => {
 };
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
 
-  // Load user data from localStorage on app start
   useEffect(() => {
     const savedUserData = localStorage.getItem('userData');
     if (savedUserData) {
-      setUserData(JSON.parse(savedUserData));
-      setIsAuthenticated(true);
+      const parsedData = JSON.parse(savedUserData);
+      console.log('User data retrieved from local storage:', parsedData);
+      setUserData(parsedData);
+    } else {
+      console.log('No user data found in local storage.');
     }
+    setIsLoading(false); // Set isLoading to false after checking for user data
   }, []);
 
-  const login = (userData) => {
-    setIsAuthenticated(true);
-    setUserData(userData);
+  const isAuthenticated = !!userData;
 
-    // Save user data in localStorage
+  const login = (userData) => {
+    setUserData(userData);
     localStorage.setItem('userData', JSON.stringify(userData));
   };
 
   const logout = () => {
-    setIsAuthenticated(false);
     setUserData(null);
-
-    // Clear user data from localStorage
     localStorage.removeItem('userData');
   };
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, userData, login, logout, isLoading }}>
       {children}
     </AuthContext.Provider>
   );

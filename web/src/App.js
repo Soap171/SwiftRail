@@ -13,64 +13,22 @@ import CheckoutPopup from './routes/CheckoutPopup';
 import Profile from './routes/Profile';
 import { AuthProvider, useAuth } from './components/AuthContext';
 import React, { useEffect } from 'react';
+import LoadingIndicator from '../src/components/LoadingIndicator';
 
 
-
-function ProfileRoute() {
-  const auth = useAuth();
-  const navigate = useNavigate();
-
-  // Use useEffect to handle authentication changes
-  React.useEffect(() => {
-    if (!auth.isAuthenticated) {
-      navigate('/Login');
+function PrivateRoute({ element: Element, ...props }) {
+    const auth = useAuth();
+  
+    if (auth.isLoading) {
+      return <LoadingIndicator />;
     }
-  }, [auth.isAuthenticated, navigate]);
-
-  if (!auth.isAuthenticated) {
-    return null; // Or display a loading indicator while redirecting
-  }
-
-  return <Profile />;
-}
-
-function SubscriptionsRoute() {
-  const auth = useAuth();
-  const navigate = useNavigate();
-
-  // Use useEffect to handle authentication changes
-  React.useEffect(() => {
+  
     if (!auth.isAuthenticated) {
-      navigate('/Login');
+      return <Navigate to="/Login" />;
     }
-  }, [auth.isAuthenticated, navigate]);
-
-  if (!auth.isAuthenticated) {
-    return null; // Or display a loading indicator while redirecting
+  
+    return <Element {...props} />;
   }
-
-  return <Subscriptions />;
-}
-
-function BookingRoute() {
-  const auth = useAuth();
-  const navigate = useNavigate();
-
-  // Use useEffect to handle authentication changes
-  React.useEffect(() => {
-    if (!auth.isAuthenticated) {
-      navigate('/Login');
-    }
-  }, [auth.isAuthenticated, navigate]);
-
-  if (!auth.isAuthenticated) {
-    return null; // Or display a loading indicator while redirecting
-  }
-
-  return <Booking />;
-}
-
-
 
 function App() {
   return (
@@ -84,10 +42,9 @@ function App() {
           <Route path="/Schedules" element={<Schedules />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/CheckoutPopup" element={<CheckoutPopup />} />
-          <Route path="/Profile" element={<ProfileRoute />} />
-        <Route path="/Subscriptions" element={<SubscriptionsRoute />} />
-        <Route path="/Booking" element={<BookingRoute />} />
+          <Route path="/Profile" element={<PrivateRoute element={Profile} />} />
+        <Route path="/Subscriptions" element={<PrivateRoute element={Subscriptions} />} />
+        <Route path="/Booking" element={<PrivateRoute element={Booking} />} />
         </Routes>
       </div>
    
