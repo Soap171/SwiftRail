@@ -117,38 +117,34 @@ function Schedules() {
     setMobileNumber('');
   };
 
-  const handleMobileNumberSubmit = async () => {
+  const handleMobileNumberSubmit = async (scheduleItem) => {
     if (mobileNumber.trim() === '') {
       setInputValid(false);
     } else {
       setInputValid(true);
-  
-      const serverURL = 'http://localhost:5001/send-sms'; // Your Node.js server URL
-  
+
+      const serverURL = 'http://localhost:5001/send-sms';
       const apiKey = '696dbe1d';
       const apiSecret = '6oNZJyHG3M5CI8me';
       const from = '94740455459';
       const to = mobileNumber;
-      const text = 'Your SMS message here';
-  
+
+      const currentTime = new Date();
+      const notifyDepartureTime = new Date(scheduleItem.departureTime);
+      notifyDepartureTime.setMinutes(notifyDepartureTime.getMinutes() - 10);
+
+      const notifyArrivalTime = new Date(scheduleItem.arrivalTime);
+      notifyArrivalTime.setMinutes(notifyArrivalTime.getMinutes() - 10);
+
       try {
-        const response = await fetch(serverURL, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ apiKey, apiSecret, from, to, text }),
-        });
-  
-        const responseData = await response.json();
-  
-        if (response.ok) {
-          console.log('SMS sent successfully!', responseData);
-          // Handle success
-        } else {
-          console.error('Failed to send SMS:', responseData);
-          // Log the specific error response
-          // Handle failure/error cases
+        if (currentTime < notifyDepartureTime) {
+          const text = `Your departure is scheduled at ${scheduleItem.departureTime}.`;
+          await sendNotificationToServer(serverURL, apiKey, apiSecret, from, to, text, notifyDepartureTime);
+        }
+
+        if (currentTime < notifyArrivalTime) {
+          const text = `Your arrival is scheduled at ${scheduleItem.arrivalTime}.`;
+          await sendNotificationToServer(serverURL, apiKey, apiSecret, from, to, text, notifyArrivalTime);
         }
       } catch (error) {
         console.error('Error sending SMS:', error);
@@ -156,7 +152,41 @@ function Schedules() {
       }
     }
   };
-  
+
+  const sendNotificationToServer = async (serverURL, apiKey, apiSecret, from, to, text, notifyTime) => {
+    const payload = {
+      apiKey,
+      apiSecret,
+      from,
+      to,
+      text,
+      notifyTime,
+    };
+
+    try {
+      const response = await fetch(serverURL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const responseData = await response.json();
+
+      if (response.ok) {
+        console.log('SMS sent successfully!', responseData);
+        // Handle success, e.g., display a success message to the user
+      } else {
+        console.error('Failed to send SMS:', responseData);
+        // Log the specific error response
+        // Handle failure/error cases
+      }
+    } catch (error) {
+      console.error('Error sending SMS:', error);
+      // Handle the error, e.g., display an error message to the user
+    }
+  };
   
 
   return (
