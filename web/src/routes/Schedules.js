@@ -117,15 +117,47 @@ function Schedules() {
     setMobileNumber('');
   };
 
-  const handleMobileNumberSubmit = () => {
+  const handleMobileNumberSubmit = async () => {
     if (mobileNumber.trim() === '') {
       setInputValid(false);
     } else {
       setInputValid(true);
-      alert('Submitted Mobile Number:', mobileNumber);
-      handleModalClose();
+  
+      const serverURL = 'http://localhost:5001/send-sms'; // Your Node.js server URL
+  
+      const apiKey = '696dbe1d';
+      const apiSecret = '6oNZJyHG3M5CI8me';
+      const from = '94740455459';
+      const to = mobileNumber;
+      const text = 'Your SMS message here';
+  
+      try {
+        const response = await fetch(serverURL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ apiKey, apiSecret, from, to, text }),
+        });
+  
+        const responseData = await response.json();
+  
+        if (response.ok) {
+          console.log('SMS sent successfully!', responseData);
+          // Handle success
+        } else {
+          console.error('Failed to send SMS:', responseData);
+          // Log the specific error response
+          // Handle failure/error cases
+        }
+      } catch (error) {
+        console.error('Error sending SMS:', error);
+        // Handle the error, e.g., display an error message to the user
+      }
     }
   };
+  
+  
 
   return (
     <div>
