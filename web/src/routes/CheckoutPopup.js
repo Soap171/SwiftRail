@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import CheckoutImg from '../assets/Checkout.jpg';
 import { useLocation } from 'react-router-dom';
-import supabase from '../config/supabaseClient'; // Import your Supabase client
 import { useAuth } from '../components/AuthContext';
 import QRCode from 'qrcode';
+import supabase from '../config/supabaseClient';
 
 function CheckoutPopup() {
-  const { userData } = useAuth(); // Access user data from the AuthContext
-  const userNIC = userData ? userData.NIC : null; // Assuming 'nic' is the property name for NIC
+  const { userData } = useAuth();
+  const userNIC = userData ? userData.NIC : null;
   const [qrCodeImage, setQRCodeImage] = useState(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [formData, setFormData] = useState({
@@ -44,57 +44,78 @@ function CheckoutPopup() {
     e.preventDefault();
 
     if (validateForm()) {
-      const subscriptionDuration = 30; // Assuming subscription duration is 30 days
-      const today = new Date().toISOString().split('T')[0]; // Get current date in 'YYYY-MM-DD' format
+      try {
+        const subscriptionDuration = 30;
+        const today = new Date().toISOString().split('T')[0];
 
-      // Fetch subscription data to get the amount for the chosen subscription
-      const { data: subscriptionData, error } = await supabase
-        .from('subscription')
-        .select('amount')
-        .eq('subscriptionId', subscriptionKey)
-        .single();
+        // Fetch subscription data to get the amount for the chosen subscription
+        const { data: subscriptionData, error: subscriptionError } = await supabase
+          .from('subscription')
+          .select('amount')
+          .eq('subscriptionId', subscriptionKey)
+          .single();
 
-      if (error) {
-        console.error('Error fetching subscription data:', error);
-        return;
-      }
-
-      const amount = subscriptionData ? subscriptionData.amount : 0; // Assuming 'amount' is the column name
-
-      // Update the customerSubscription table in Supabase
-      const { data: updatedData, error: updateError } = await supabase
-        .from('customerSubscription')
-        .upsert([
-          {
-            subscriptionId: subscriptionKey,
-            customerNIC: userNIC,
-            balance: amount,
-            QrStatus: true,
-            subscriptionDuration: subscriptionDuration,
-            paymentDate: today,
-          },
-        ]);
-
-      if (updateError) {
-        console.error('Error updating customerSubscription:', updateError);
-        return;
-      }
-
-      setPaymentComplete(true); // Payment successful
-      const qrData = JSON.stringify({
-        transactionID: subscriptionKey,
-        customerNIC: userNIC,
-        amount: amount,
-        
-      });
-      
-      QRCode.toDataURL(qrData, (err, url) => {
-        if (err) {
-          console.error('Error generating QR code:', err);
-        } else {
-          setQRCodeImage(url); // Save the generated QR code image URL
+        if (subscriptionError) {
+          console.error('Error fetching subscription data:', subscriptionError);
+          return;
         }
-      });
+
+        const amount = subscriptionData ? subscriptionData.amount : 0;
+
+        // Update the customerSubscription table in Supabase
+        const { data: updatedData, error: updateError } = await supabase
+          .from('customerSubscription')
+          .upsert([
+            {
+              subscriptionId: subscriptionKey,
+              customerNIC: userNIC,
+              balance: amount,
+              QrStatus: true,
+              subscriptionDuration: subscriptionDuration,
+              paymentDate: today,
+            },
+          ]);
+
+        if (updateError) {
+          console.error('Error updating customerSubscription:', updateError);
+          return;
+        }
+
+        setPaymentComplete(true); // Payment successful
+
+        // Fetch the balance after the transaction
+        const { data: newSubscriptionData, error: newSubscriptionError } = await supabase
+          .from('customerSubscription')
+          .select('balance')
+          .eq('customerNIC', userNIC)
+          .eq('subscriptionId', subscriptionKey)
+          .single();
+
+        if (newSubscriptionError) {
+          console.error('Error fetching subscription data:', newSubscriptionError);
+          return;
+        }
+
+        const balance = newSubscriptionData ? newSubscriptionData.balance : 0;
+
+        // Generate the QR code data including 'balance'
+        const qrData = JSON.stringify({
+          transactionID: subscriptionKey,
+          customerNIC: userNIC,
+          balance: balance, // Include 'balance' in the QR code
+        });
+
+        // Generate the QR code image
+        QRCode.toDataURL(qrData, (err, url) => {
+          if (err) {
+            console.error('Error generating QR code:', err);
+          } else {
+            setQRCodeImage(url); // Save the generated QR code image URL
+          }
+        });
+      } catch (error) {
+        console.error('Error during payment:', error);
+      }
     }
   };
 
@@ -110,22 +131,21 @@ function CheckoutPopup() {
               <h2>Payment Successful</h2>
               <p>Thank you for your payment. Your order has been successfully processed.</p>
               {qrCodeImage && (
-            <div>
-              <h3>Download Your Payment Receipt</h3>
-              {/* Adjust the size of the image element */}
-              <img
-                src={qrCodeImage}
-                alt="Payment Receipt QR Code"
-                style={{ width: '200px', height: '200px' }} // Set the desired width and height
-              />
+                <div>
+                  <h3>Download Your Payment Receipt</h3>
+                  {/* Adjust the size of the image element */}
+                  <img
+                    src={qrCodeImage}
+                    alt="Payment Receipt QR Code"
+                    style={{ width: '200px', height: '200px' }} // Set the desired width and height
+                  />
 
-              {/* Add a download link for the QR code image */}
-              <a href={qrCodeImage} download="payment_receipt.png">
-                Download QR Code
-              </a>
-            </div>
-          )}
-         
+                  {/* Add a download link for the QR code image */}
+                  <a href={qrCodeImage} download="payment_receipt.png">
+                    Download QR Code
+                  </a>
+                </div>
+              )}
             </div>
           ) : (
             <div className="col-md-6 offset-md-3">
