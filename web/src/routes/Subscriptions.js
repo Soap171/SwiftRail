@@ -51,23 +51,23 @@ function Subscriptions() {
       />
 
         
-       <div class="container">
+       <div className="container">
           <h1 className="text-center mt-4">Subscription Plans</h1>
-          <p class="text-center text-lg-center text-md-center">
+          <p className="text-center text-lg-center text-md-center">
           Flexibility Meets Digital Ticketing: Your Journey, Your Way! Choose a Flexible Plan for Seamless QR Digital Ticketing
          </p>
        </div>
 
         <div className="row">
-        {subscriptions.map((subscription) => (
-      <SubscriptionPlan
-    key={subscription.primaryKey} // Use the primary key as the key attribute
-    title={subscription.subscriptionPlanName}
-    price={`$${subscription.amount}/month`}
-    description={subscription.description}
-    primaryKey={subscription.primaryKey} // Pass the primary key as a prop
+        {subscriptions.map((subscription, index) => (
+    <SubscriptionPlan
+      key={index} // This uses the array index as the key - be cautious with this approach
+      title={subscription.subscriptionPlanName}
+      price={`$${subscription.amount}/month`}
+      description={subscription.description}
+      primaryKey={subscription.subscriptionId} // Assuming subscriptionId is unique
     />
-   ))}
+  ))}
           
         </div>
      <Footer/>

@@ -1,7 +1,7 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Link } from 'react-router-dom';
-import '../components/Button.css'
+import '../components/Button.css';
 
 function SubscriptionPlan(props) {
   const { title, price, description, primaryKey } = props;
