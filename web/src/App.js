@@ -36,6 +36,7 @@ function App() {
       <div className="App">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/CheckoutPopup" element={<CheckoutPopup/>} />
           <Route path="/About" element={<About />} />
           <Route path="/Service" element={<Service />} />
           <Route path="/Contact" element={<Contact />} />

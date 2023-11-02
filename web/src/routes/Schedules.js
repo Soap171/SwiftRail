@@ -6,7 +6,6 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import ScheduleImg from '../assets/Schedule.jpg';
 import { useAuth } from '../components/AuthContext';
-import Modal from 'react-modal'; // Import the Modal component
 
 function Schedules() {
   const { isAuthenticated } = useAuth(); // Fetching isAuthenticated status 
