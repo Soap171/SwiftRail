@@ -6,10 +6,12 @@ import CheckoutImg from '../assets/Checkout.jpg';
 import { useLocation } from 'react-router-dom';
 import supabase from '../config/supabaseClient'; // Import your Supabase client
 import { useAuth } from '../components/AuthContext';
+import QRCode from 'qrcode';
 
 function CheckoutPopup() {
   const { userData } = useAuth(); // Access user data from the AuthContext
   const userNIC = userData ? userData.NIC : null; // Assuming 'nic' is the property name for NIC
+  const [qrCodeImage, setQRCodeImage] = useState(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [formData, setFormData] = useState({
     cardType: 'visa',
@@ -79,6 +81,20 @@ function CheckoutPopup() {
       }
 
       setPaymentComplete(true); // Payment successful
+      const qrData = JSON.stringify({
+        transactionID: subscriptionKey,
+        customerNIC: userNIC,
+        amount: amount,
+        
+      });
+      
+      QRCode.toDataURL(qrData, (err, url) => {
+        if (err) {
+          console.error('Error generating QR code:', err);
+        } else {
+          setQRCodeImage(url); // Save the generated QR code image URL
+        }
+      });
     }
   };
 
@@ -93,6 +109,23 @@ function CheckoutPopup() {
             <div className="col-md-12">
               <h2>Payment Successful</h2>
               <p>Thank you for your payment. Your order has been successfully processed.</p>
+              {qrCodeImage && (
+            <div>
+              <h3>Download Your Payment Receipt</h3>
+              {/* Adjust the size of the image element */}
+              <img
+                src={qrCodeImage}
+                alt="Payment Receipt QR Code"
+                style={{ width: '200px', height: '200px' }} // Set the desired width and height
+              />
+
+              {/* Add a download link for the QR code image */}
+              <a href={qrCodeImage} download="payment_receipt.png">
+                Download QR Code
+              </a>
+            </div>
+          )}
+         
             </div>
           ) : (
             <div className="col-md-6 offset-md-3">
