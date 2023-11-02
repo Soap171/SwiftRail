@@ -22,7 +22,7 @@ function Subscriptions() {
         // Fetch subscription data from Supabase
         const { data, error } = await supabase
           .from('subscription') // Replace 'subscription' with your actual table name
-          .select('subscriptionPlanName, amount, description');
+          .select('subscriptionPlanName, amount, description,subscriptionId');
 
         if (error) {
           throw error;

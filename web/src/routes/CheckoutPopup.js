@@ -14,9 +14,11 @@ function CheckoutPopup() {
     expiration: '',
     cvv: '',
   });
+
+    const location = useLocation();
+    const subscriptionKey = location.state ? location.state.subscriptionKey : null;
   const [formErrors, setFormErrors] = useState({});
-  const location = useLocation();
-  const subscriptionKey = location.state ? location.state.subscriptionKey : null;
+ 
 
   useEffect(() => {
     console.log('Subscription Key:', subscriptionKey);
