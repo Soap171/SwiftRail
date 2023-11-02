@@ -5,6 +5,7 @@ import Hero from '../components/Hero';
 import CheckoutImg from '../assets/Checkout.jpg';
 import { useLocation } from 'react-router-dom';
 import '../components/Button.css';
+import { useAuth } from '../components/AuthContext';
 
 function CheckoutPopup() {
   const [paymentComplete, setPaymentComplete] = useState(false);
@@ -14,6 +15,13 @@ function CheckoutPopup() {
     expiration: '',
     cvv: '',
   });
+ 
+  const { userData } = useAuth();
+  const userNIC = userData ? userData.NIC : null;
+
+  useEffect(() => {
+    console.log('User NIC:', userNIC); // Log the userNIC to the console
+  }, [userNIC]);
 
     const location = useLocation();
     const subscriptionKey = location.state ? location.state.subscriptionKey : null;
