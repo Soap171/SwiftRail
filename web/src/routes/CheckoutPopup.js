@@ -3,12 +3,14 @@ import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import CheckoutImg from '../assets/Checkout.jpg';
-import { useLocation } from 'react-router-dom';
 import { useAuth } from '../components/AuthContext';
 import QRCode from 'qrcode';
 import supabase from '../config/supabaseClient';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function CheckoutPopup() {
+  const navigate = useNavigate();
   const { userData } = useAuth();
   const userNIC = userData ? userData.NIC : null;
   const [qrCodeImage, setQRCodeImage] = useState(null);
@@ -82,38 +84,11 @@ function CheckoutPopup() {
         }
 
         setPaymentComplete(true); // Payment successful
+       
 
-        // Fetch the balance after the transaction
-        const { data: newSubscriptionData, error: newSubscriptionError } = await supabase
-          .from('customerSubscription')
-          .select('balance')
-          .eq('customerNIC', userNIC)
-          .eq('subscriptionId', subscriptionKey)
-          .single();
+       
 
-        if (newSubscriptionError) {
-          console.error('Error fetching subscription data:', newSubscriptionError);
-          return;
-        }
-
-        const balance = newSubscriptionData ? newSubscriptionData.balance : 0;
-        console.log(newSubscriptionData.balance);
-
-        // Generate the QR code data including 'balance'
-        const qrData = JSON.stringify({
-          transactionID: subscriptionKey,
-          customerNIC: userNIC,
-          balance: balance, // Include 'balance' in the QR code
-        });
-
-        // Generate the QR code image
-        QRCode.toDataURL(qrData, (err, url) => {
-          if (err) {
-            console.error('Error generating QR code:', err);
-          } else {
-            setQRCodeImage(url); // Save the generated QR code image URL
-          }
-        });
+        
       } catch (error) {
         console.error('Error during payment:', error);
       }
@@ -131,22 +106,7 @@ function CheckoutPopup() {
             <div className="col-md-12">
               <h2>Payment Successful</h2>
               <p>Thank you for your payment. Your order has been successfully processed.</p>
-              {qrCodeImage && (
-                <div>
-                  <h3>Download Your Payment Receipt</h3>
-                  {/* Adjust the size of the image element */}
-                  <img
-                    src={qrCodeImage}
-                    alt="Payment Receipt QR Code"
-                    style={{ width: '200px', height: '200px' }} // Set the desired width and height
-                  />
-
-                  {/* Add a download link for the QR code image */}
-                  <a href={qrCodeImage} download="payment_receipt.png">
-                    Download QR Code
-                  </a>
-                </div>
-              )}
+              <Link to="/Profile" className="btn btn-primary">Check The QR</Link>
             </div>
           ) : (
             <div className="col-md-6 offset-md-3">
