@@ -3,21 +3,26 @@ import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import CheckoutImg from '../assets/Checkout.jpg';
-import '../components/Button.css';
+import { useAuth } from '../components/AuthContext';
+import QRCode from 'qrcode';
+import supabase from '../config/supabaseClient';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function CheckoutPopup() {
+  const navigate = useNavigate();
+  const { userData } = useAuth();
+  const userNIC = userData ? userData.NIC : null;
+  const [qrCodeImage, setQRCodeImage] = useState(null);
   const [paymentComplete, setPaymentComplete] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    address: '',
-    city: '',
-    zip: '',
     cardType: 'visa',
     cardNumber: '',
     expiration: '',
     cvv: '',
   });
+  const location = useLocation();
+  const subscriptionKey = location.state ? location.state.subscriptionKey : null;
   const [formErrors, setFormErrors] = useState({});
 
   const handleInputChange = (e) => {
@@ -28,41 +33,65 @@ function CheckoutPopup() {
   const validateForm = () => {
     const errors = {};
 
-    if (!formData.fullName) {
-      errors.fullName = 'Full Name is required';
-    }
-
-    if (!formData.email) {
-      errors.email = 'Email is required';
-    }
-
-  
-
+    // Validation logic for card details (example - card number)
     if (!formData.cardNumber) {
       errors.cardNumber = 'Card Number is required';
-    }
-
-    if (!formData.expiration) {
-      errors.expiration = 'Expiration Date is required';
-    }
-
-    if (!formData.cvv) {
-      errors.cvv = 'CVV is required';
     }
 
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
 
-  const handlePayment = (e) => {
+  const handlePayment = async (e) => {
     e.preventDefault();
 
     if (validateForm()) {
-      // You can add your payment processing logic here.
-      // For this example, we'll simulate a payment with a brief delay.
-      setTimeout(() => {
-        setPaymentComplete(true);
-      }, 2000); // Simulating a 2-second payment processing delay
+      try {
+        const subscriptionDuration = 30;
+        const today = new Date().toISOString().split('T')[0];
+
+        // Fetch subscription data to get the amount for the chosen subscription
+        const { data: subscriptionData, error: subscriptionError } = await supabase
+          .from('subscription')
+          .select('amount')
+          .eq('subscriptionId', subscriptionKey)
+          .single();
+
+        if (subscriptionError) {
+          console.error('Error fetching subscription data:', subscriptionError);
+          return;
+        }
+
+        const amount = subscriptionData ? subscriptionData.amount : 0;
+
+        // Update the customerSubscription table in Supabase
+        const { data: updatedData, error: updateError } = await supabase
+          .from('customerSubscription')
+          .upsert([
+            {
+              subscriptionId: subscriptionKey,
+              customerNIC: userNIC,
+              balance: amount,
+              QrStatus: true,
+              subscriptionDuration: subscriptionDuration,
+              paymentDate: today,
+            },
+          ]);
+
+        if (updateError) {
+          console.error('Error updating customerSubscription:', updateError);
+          return;
+        }
+
+        setPaymentComplete(true); // Payment successful
+       
+
+       
+
+        
+      } catch (error) {
+        console.error('Error during payment:', error);
+      }
     }
   };
 
@@ -77,105 +106,78 @@ function CheckoutPopup() {
             <div className="col-md-12">
               <h2>Payment Successful</h2>
               <p>Thank you for your payment. Your order has been successfully processed.</p>
-              {/* You can display the order summary here. */}
+              <Link to="/Profile" className="btn btn-primary">Check The QR</Link>
             </div>
           ) : (
-            <>
-              <div className="col-md-6">
-                <h2>Billing Information</h2>
-                <form onSubmit={handlePayment}>
-                  <div className="form-group">
-                    <label htmlFor="fullName">Full Name</label>
+            <div className="col-md-6 offset-md-3">
+              <h2>Payment Information</h2>
+              <form onSubmit={handlePayment}>
+                {/* Card Type */}
+                <div className="form-group">
+                  <label htmlFor="cardType">Card Type</label>
+                  <select
+                    className="form-control"
+                    id="cardType"
+                    name="cardType"
+                    value={formData.cardType}
+                    onChange={handleInputChange}
+                  >
+                    <option value="visa">Visa</option>
+                    <option value="mastercard">MasterCard</option>
+                    <option value="amex">American Express</option>
+                  </select>
+                </div>
+                {/* Card Number */}
+                <div className="form-group">
+                  <label htmlFor="cardNumber">Card Number</label>
+                  <input
+                    type="text"
+                    className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
+                    id="cardNumber"
+                    name="cardNumber"
+                    value={formData.cardNumber}
+                    onChange={handleInputChange}
+                  />
+                  {formErrors.cardNumber && <div className="invalid-feedback">{formErrors.cardNumber}</div>}
+                </div>
+                {/* Expiration and CVV */}
+                <div className="form-row">
+                  <div className="form-group text-center">
+                    <label htmlFor="expiration">Expiration Date</label>
                     <input
                       type="text"
-                      className={`form-control ${formErrors.fullName ? 'is-invalid' : ''}`}
-                      id="fullName"
-                      name="fullName"
+                      className="form-control"
+                      id="expiration"
+                      name="expiration"
+                      value={formData.expiration}
                       onChange={handleInputChange}
                     />
-                    {formErrors.fullName && <div className="invalid-feedback">{formErrors.fullName}</div>}
+                    {/* Add any validation/error display for expiration */}
                   </div>
-                  <div className="form-group">
-                    <label htmlFor="email">Email</label>
-                    <input
-                      type="email"
-                      className={`form-control ${formErrors.email ? 'is-invalid' : ''}`}
-                      id="email"
-                      name="email"
-                      onChange={handleInputChange}
-                    />
-                    {formErrors.email && <div className="invalid-feedback">{formErrors.email}</div>}
-                  </div>
-                </form>
-              </div>
-
-              <div className="col-md-6">
-                <h2>Payment Information</h2>
-                <form onSubmit={handlePayment}>
-                  <div className="form-group">
-                    <label htmlFor="cardType">Card Type</label>
-                    <select
-                      className={`form-control ${formErrors.cardType ? 'is-invalid' : ''}`}
-                      id="cardType"
-                      name="cardType"
-                      onChange={handleInputChange}
-                    >
-                      <option value="visa">Visa</option>
-                      <option value="mastercard">MasterCard</option>
-                      <option value="amex">American Express</option>
-                    </select>
-                    {formErrors.cardType && <div className="invalid-feedback">{formErrors.cardType}</div>}
-                  </div>
-                  <div className="form-group">
-                    <label htmlFor="cardNumber">Card Number</label>
+                  <div className="form-group text-center">
+                    <label htmlFor="cvv">CVV</label>
                     <input
                       type="text"
-                      className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
-                      id="cardNumber"
-                      name="cardNumber"
+                      className="form-control"
+                      id="cvv"
+                      name="cvv"
+                      value={formData.cvv}
                       onChange={handleInputChange}
                     />
-                    {formErrors.cardNumber && <div className="invalid-feedback">{formErrors.cardNumber}</div>}
+                    {/* Add any validation/error display for CVV */}
                   </div>
-                  <div className="form-row">
-                    <div className="form-group text-center">
-                      <label htmlFor="expiration">Expiration Date</label>
-                      <input
-                        type="text"
-                        className={`form-control ${formErrors.expiration ? 'is-invalid' : ''}`}
-                        id="expiration"
-                        name="expiration"
-                        placeholder="MM/YY"
-                        onChange={handleInputChange}
-                      />
-                      {formErrors.expiration && <div className="invalid-feedback">{formErrors.expiration}</div>}
-                    </div>
-                    <div className="form-group text-center">
-                      <label htmlFor="cvv">CVV</label>
-                      <input
-                        type="text"
-                        className={`form-control ${formErrors.cvv ? 'is-invalid' : ''}`}
-                        id="cvv"
-                        name="cvv"
-                        onChange={handleInputChange}
-                      />
-                      {formErrors.cvv && <div className="invalid-feedback">{formErrors.cvv}</div>}
-                    </div>
-                  </div>
-                   <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
-                      Pay
-                  </button>
-                </form>
-              </div>
-            </>
+                </div>
+                <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
+                  Pay
+                </button>
+              </form>
+            </div>
           )}
         </div>
-     </div>
-   <Footer />
-</div>
-);
+      </div>
+      <Footer />
+    </div>
+  );
 }
-              
- export default CheckoutPopup;
-              
-         
+
+export default CheckoutPopup;

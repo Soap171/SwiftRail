@@ -1,4 +1,3 @@
-import React from 'react';
 import NavBar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SubscriptionPlan from '../components/SubscriptionPlan';
@@ -6,8 +5,41 @@ import img from '../assets/Subscription.jpg'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
 import '../components/Button.css'
+import supabase from '../config/supabaseClient';
+import React, { useState, useEffect } from 'react';
+
+
+
 
 function Subscriptions() {
+
+  const [subscriptions, setSubscriptions] = useState([]);
+
+
+  useEffect(() => {
+    async function fetchSubscriptions() {
+      try {
+        // Fetch subscription data from Supabase
+        const { data, error } = await supabase
+          .from('subscription') // Replace 'subscription' with your actual table name
+          .select('subscriptionPlanName, amount, description,subscriptionId');
+
+        if (error) {
+          throw error;
+        }
+
+        if (data) {
+          setSubscriptions(data);
+        }
+      } catch (error) {
+        console.error('Error fetching subscription data:', error.message);
+      }
+    }
+
+    fetchSubscriptions();
+  }, []); // Run this effect only once when the component mounts
+
+
   return (
     <>
       <NavBar />
@@ -19,29 +51,23 @@ function Subscriptions() {
       />
 
         
-       <div class="container">
+       <div className="container">
           <h1 className="text-center mt-4">Subscription Plans</h1>
-          <p class="text-center text-lg-center text-md-center">
+          <p className="text-center text-lg-center text-md-center">
           Flexibility Meets Digital Ticketing: Your Journey, Your Way! Choose a Flexible Plan for Seamless QR Digital Ticketing
          </p>
        </div>
 
         <div className="row">
-          <SubscriptionPlan
-            title="Basic Plan"
-            price="$10/month"
-            description="Access to basic features"
-          />
-          <SubscriptionPlan
-            title="Pro Plan"
-            price="$20/month"
-            description="Access to pro features"
-          />
-          <SubscriptionPlan
-            title="Premium Plan"
-            price="$30/month"
-            description="Access to premium features"
-          />
+        {subscriptions.map((subscription, index) => (
+    <SubscriptionPlan
+      key={index} // This uses the array index as the key - be cautious with this approach
+      title={subscription.subscriptionPlanName}
+      price={`$${subscription.amount}/month`}
+      description={subscription.description}
+      primaryKey={subscription.subscriptionId} // Assuming subscriptionId is unique
+    />
+  ))}
           
         </div>
      <Footer/>

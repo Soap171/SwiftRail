@@ -1,15 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import BookingImg from '../assets/Booking.jpg';
-import '../components/Button.css'
+import '../components/Button.css';
+import supabase from '../config/supabaseClient';
+import { useAuth } from '../components/AuthContext';
 
 export default function Booking() {
-  const [formData, setFormData] = useState({
-    senderName: '',
+  const { userData } = useAuth();
+
+  const initialFormData = {
+    senderName: userData ? userData.userName : '',
     senderPhone: '',
-    senderNIC: '',
+    senderNIC: userData ? userData.NIC : '',
     senderRailwayStation: '',
     recipientName: '',
     recipientAddress: '',
@@ -17,64 +21,66 @@ export default function Booking() {
     recipientNIC: '',
     recipientRailwayStation: '',
     parcelDescription: '',
-  });
+  };
 
-  const [errors, setErrors] = useState({});
+  const [formData, setFormData] = useState(initialFormData);
+  const [railwayStations, setRailwayStations] = useState([]);
+  const [showSuccessAlert, setShowSuccessAlert] = useState(false);
+
+  useEffect(() => {
+    const fetchRailwayStations = async () => {
+      const { data, error } = await supabase.from('railwayStation').select('*');
+      if (error) {
+        console.error('Error fetching railway stations:', error);
+      } else {
+        setRailwayStations(data);
+      }
+    };
+
+    fetchRailwayStations();
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const validateForm = () => {
-    const errors = {};
-
-    // Sender details validation
-    if (!formData.senderName) {
-      errors.senderName = 'Sender Name is required';
-    }
-  
-    if (!formData.senderPhone) {
-      errors.senderPhone = 'Sender Phone is required';
-    } else if (!/^\d{10}$/.test(formData.senderPhone)) {
-      errors.senderPhone = 'Invalid Sender Phone number';
-    }
-    if (!formData.senderNIC) {
-      errors.senderNIC = 'Sender NIC is required';
-    }
-    if (!formData.senderRailwayStation) {
-      errors.senderRailwayStation = 'Sender Railway Station is required';
-    }
-
-    // Recipient details validation
-    if (!formData.recipientName) {
-      errors.recipientName = 'Recipient Name is required';
-    }
-    if (!formData.recipientAddress) {
-      errors.recipientAddress = 'Recipient Address is required';
-    }
-    if (!formData.recipientPhone) {
-      errors.recipientPhone = 'Recipient Phone is required';
-    } else if (!/^\d{10}$/.test(formData.recipientPhone)) {
-      errors.recipientPhone = 'Invalid Recipient Phone number';
-    }
-    if (!formData.recipientNIC) {
-      errors.recipientNIC = 'Recipient NIC is required';
-    }
-    if (!formData.recipientRailwayStation) {
-      errors.recipientRailwayStation = 'Recipient Railway Station is required';
-    }
-
-    setErrors(errors);
-    return Object.keys(errors).length === 0;
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
-      // Form is valid, you can proceed with form submission
-      // Use formData to send data to your server or perform any necessary actions
-    }
+
+    try {
+      // Insert data into the 'parcelBooking' table in Supabase
+      const { data, error } = await supabase
+        .from('parcelBooking')
+        .insert([
+          {
+            parcelContent: formData.parcelDescription,
+            senderContactNo: formData.senderPhone,
+            senderName: formData.senderName,
+            recipientContactNo: formData.recipientPhone,
+            recipientName: formData.recipientName,
+            recipientNIC: formData.recipientNIC,
+            senderNIC: formData.senderNIC,
+            stationId: formData.senderRailwayStation,
+            destinationStationId: formData.recipientRailwayStation,
+          },
+        ]);
+
+        if (error) {
+          console.error('Error inserting data:', error);
+          // Handle error (e.g., display an error message)
+        } else {
+          // Data inserted successfully
+          // Handle success (e.g., show a success message)
+          setShowSuccessAlert(true);
+          setFormData(initialFormData);
+          setTimeout(() => {
+            setShowSuccessAlert(false);
+          }, 60000);
+        }
+      } catch (error) {
+        console.error('Error:', error.message);
+      }
   };
 
   return (
@@ -93,133 +99,116 @@ export default function Booking() {
           <div className="form-group mt-2">
             <input
               type="text"
-              className={`form-control ${errors.senderName && 'is-invalid'}`}
+              className="form-control"
               name="senderName"
               placeholder="Sender's Name"
               value={formData.senderName}
               onChange={handleInputChange}
+             
             />
-            {errors.senderName && (
-              <div className="invalid-feedback">{errors.senderName}</div>
-            )}
           </div>
           <div className="form-group mt-2">
             <input
               type="tel"
-              className={`form-control ${errors.senderPhone && 'is-invalid'}`}
+              className="form-control"
               name="senderPhone"
               placeholder="Sender's Phone"
               value={formData.senderPhone}
               onChange={handleInputChange}
+              required
             />
-            {errors.senderPhone && (
-              <div className="invalid-feedback">{errors.senderPhone}</div>
-            )}
           </div>
           <div className="form-group mt-2">
             <input
               type="text"
-              className={`form-control ${errors.senderNIC && 'is-invalid'}`}
+              className="form-control"
               name="senderNIC"
               placeholder="Sender's NIC"
               value={formData.senderNIC}
               onChange={handleInputChange}
             />
-            {errors.senderNIC && (
-              <div className="invalid-feedback">{errors.senderNIC}</div>
-            )}
           </div>
           <div className="form-group mt-2">
-            <input
-              type="text"
-              className={`form-control ${errors.senderRailwayStation && 'is-invalid'}`}
+            <select
+              className="form-control"
               name="senderRailwayStation"
-              placeholder="Sender's Railway Station"
+              required
               value={formData.senderRailwayStation}
-              onChange={handleInputChange}
-            />
-            {errors.senderRailwayStation && (
-              <div className="invalid-feedback">{errors.senderRailwayStation}</div>
-            )}
+              onChange={(e) => handleInputChange(e)}
+            >
+              <option value="">Select Sender's Railway Station</option>
+              {railwayStations.map(station => (
+                <option key={station.stationId} value={station.stationId}>
+                  {station.city}
+                </option>
+              ))}
+            </select>
           </div>
 
           <h2 className='mt-5'>Recipient Details</h2>
           <div className="form-group mt-2">
-            <input
-              type="text"
-              className={`form-control ${errors.recipientName && 'is-invalid'}`}
-              name="recipientName"
-              placeholder="Recipient's Name"
-              value={formData.recipientName}
-              onChange={handleInputChange}
-            />
-            {errors.recipientName && (
-              <div className="invalid-feedback">{errors.recipientName}</div>
-            )}
+            <select
+              className="form-control"
+              name="recipientRailwayStation"
+              required
+              value={formData.recipientRailwayStation}
+              onChange={(e) => handleInputChange(e)}
+            >
+              <option value="">Select Recipient's Railway Station</option>
+              {railwayStations.map(station => (
+                <option key={station.stationId} value={station.stationId}>
+                  {station.city}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="form-group mt-2">
             <input
               type="text"
-              className={`form-control ${errors.recipientAddress && 'is-invalid'}`}
+              className="form-control"
               name="recipientAddress"
+              required
               placeholder="Recipient's Address"
               value={formData.recipientAddress}
               onChange={handleInputChange}
             />
-            {errors.recipientAddress && (
-              <div className="invalid-feedback">{errors.recipientAddress}</div>
-            )}
           </div>
           <div className="form-group mt-2">
             <input
               type="tel"
-              className={`form-control ${errors.recipientPhone && 'is-invalid'}`}
+              className="form-control"
               name="recipientPhone"
               placeholder="Recipient's Phone"
+              required
               value={formData.recipientPhone}
               onChange={handleInputChange}
             />
-            {errors.recipientPhone && (
-              <div className="invalid-feedback">{errors.recipientPhone}</div>
-            )}
           </div>
           <div className="form-group mt-2">
             <input
               type="text"
-              className={`form-control ${errors.recipientNIC && 'is-invalid'}`}
+              className="form-control"
               name="recipientNIC"
               placeholder="Recipient's NIC"
+              required
               value={formData.recipientNIC}
               onChange={handleInputChange}
             />
-            {errors.recipientNIC && (
-              <div className="invalid-feedback">{errors.recipientNIC}</div>
-            )}
-          </div>
-          <div className="form-group mt-2">
-            <input
-              type="text"
-              className={`form-control ${errors.recipientRailwayStation && 'is-invalid'}`}
-              name="recipientRailwayStation"
-              placeholder="Recipient's Railway Station"
-              value={formData.recipientRailwayStation}
-              onChange={handleInputChange}
-            />
-            {errors.recipientRailwayStation && (
-              <div className="invalid-feedback">{errors.recipientRailwayStation}</div>
-            )}
           </div>
 
+          
           <div className="form-group">
             <label className='mt-5'>Parcel Description</label>
             <textarea
               className="form-control mt-2"
               name="parcelDescription"
               placeholder="Enter Parcel Description"
+              required
               value={formData.parcelDescription}
               onChange={handleInputChange}
             />
           </div>
+         
 
           <button type="submit" className="btn btn-primary mt-4">
             Submit
@@ -230,4 +219,3 @@ export default function Booking() {
     </div>
   );
 }
-
