@@ -97,6 +97,7 @@ function CheckoutPopup() {
         }
 
         const balance = newSubscriptionData ? newSubscriptionData.balance : 0;
+        console.log(newSubscriptionData.balance);
 
         // Generate the QR code data including 'balance'
         const qrData = JSON.stringify({
