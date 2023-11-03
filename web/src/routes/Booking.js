@@ -21,7 +21,6 @@ export default function Booking() {
     recipientNIC: '',
     recipientRailwayStation: '',
     parcelDescription: '',
-    weight:''
   };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -55,7 +54,6 @@ export default function Booking() {
         .from('parcelBooking')
         .insert([
           {
-            weight: formData.weight,
             parcelContent: formData.parcelDescription,
             senderContactNo: formData.senderPhone,
             senderName: formData.senderName,
@@ -198,19 +196,6 @@ export default function Booking() {
             />
           </div>
 
-         
-          
-          <div className="form-group mt-2">
-            <input
-              type="text"
-              className="form-control"
-              name="weight"
-              placeholder="Weight"
-              required
-              value={formData.weight}
-              onChange={handleInputChange}
-            />
-          </div>
           
           <div className="form-group">
             <label className='mt-5'>Parcel Description</label>
