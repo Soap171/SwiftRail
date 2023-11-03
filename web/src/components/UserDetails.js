@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../components/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import supabase from '../config/supabaseClient';
+import QRCode from 'qrcode';
 
 const Userdetails = () => {
     const { userData, logout } = useAuth();
@@ -13,6 +14,8 @@ const Userdetails = () => {
         address: false,
         email: false,
     });
+    const [qrCodeImage, setQRCodeImage] = useState('');
+    const [subscriptionDetails, setSubscriptionDetails] = useState(null);
 
     const handleLogout = () => {
         logout();
@@ -78,6 +81,45 @@ const Userdetails = () => {
         fetchParcelBookings();
     }, [userData]);
 
+    useEffect(() => {
+        const fetchSubscriptionDetails = async () => {
+          if (!userData || !userData.NIC) return;
+      
+          const { data, error } = await supabase
+            .from('customerSubscription')
+            .select('subscriptionId, balance')
+            .eq('customerNIC', userData.NIC)
+            .single();
+      
+          if (error) {
+            console.error('Error fetching subscription details:', error);
+          } else if (data) {
+            setSubscriptionDetails(data);
+            generateQRCode();
+          }
+        };
+      
+        fetchSubscriptionDetails();
+      }, [userData, userDetails]);
+
+      const generateQRCode = async () => {
+        if (subscriptionDetails) {
+          const qrData = JSON.stringify({
+            transactionID: subscriptionDetails.subscriptionId,
+            customerNIC: userData.NIC,
+            balance: subscriptionDetails.balance || 0, // Include 'balance' in the QR code
+          });
+    
+          QRCode.toDataURL(qrData, (err, url) => {
+            if (err) {
+              console.error('Error generating QR code:', err);
+            } else {
+              setQRCodeImage(url); // Save the generated QR code image URL
+            }
+          });
+        }
+      };
+
     return (
         <div className="container light-style flex-grow-1 container-p-y">
             <h4 className="font-weight-bold py-3 mb-4">
@@ -89,6 +131,7 @@ const Userdetails = () => {
                         <div className="list-group list-group-flush account-settings-links">
                             <a className="list-group-item list-group-item-action show active" data-bs-toggle="list" href="#general">General</a>
                             <a className="list-group-item list-group-item-action" data-bs-toggle="list" href="#parcel-details">Parcel Details</a>
+                            <a className="list-group-item list-group-item-action" data-bs-toggle="list" href="#subscription">Subscription Details</a>
                         </div>
                     </div>
                     <div className="col-md-9 mt-4 mb-4">
@@ -224,6 +267,17 @@ const Userdetails = () => {
                                         </div>
                                     ))}
                                 </div>
+                            </div>
+                            <div className="tab-pane fade" id="subscription">
+                            <div>
+                  <label className="form-label">Subscription ID</label>
+                  <input type="text" className="form-control" value={subscriptionDetails?.subscriptionId || ''} readOnly />
+                  <label className="form-label">Balance</label>
+                  <input type="text" className="form-control" value={subscriptionDetails?.balance || ''} readOnly />
+                </div>
+
+                {/* Display the generated QR code */}
+                <img src={qrCodeImage} alt="Updated QR Code" style={{ width: '200px', height: '200px' }} />
                             </div>
                         </div>
                     </div>
