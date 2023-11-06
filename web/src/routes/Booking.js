@@ -6,6 +6,7 @@ import BookingImg from '../assets/Booking.jpg';
 import '../components/Button.css';
 import supabase from '../config/supabaseClient';
 import { useAuth } from '../components/AuthContext';
+import axios from 'axios';
 
 export default function Booking() {
   const { userData } = useAuth();
@@ -49,11 +50,11 @@ export default function Booking() {
     e.preventDefault();
 
     try {
-      // Insert data into the 'parcelBooking' table in Supabase
       const { data, error } = await supabase
         .from('parcelBooking')
         .insert([
           {
+           
             parcelContent: formData.parcelDescription,
             senderContactNo: formData.senderPhone,
             senderName: formData.senderName,
@@ -66,21 +67,31 @@ export default function Booking() {
           },
         ]);
 
-        if (error) {
-          console.error('Error inserting data:', error);
-          // Handle error (e.g., display an error message)
-        } else {
-          // Data inserted successfully
-          // Handle success (e.g., show a success message)
-          setShowSuccessAlert(true);
-          setFormData(initialFormData);
-          setTimeout(() => {
-            setShowSuccessAlert(false);
-          }, 60000);
+      if (error) {
+        console.error('Error inserting data:', error);
+        // Handle error
+      } else {
+        setShowSuccessAlert(true);
+        setFormData(initialFormData);
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+        }, 60000);
+
+        // Send SMS to the sender's contact number
+        try {
+          const message = 'Your parcel has been successfully booked. Thank you!';
+          await axios.post('http://localhost:3001/send-sms', {
+            message,
+            phoneNumber: formData.senderPhone, // assuming sender's phone number
+          });
+          console.log('Success message sent to the sender!');
+        } catch (error) {
+          console.error('Failed to send SMS:', error);
         }
-      } catch (error) {
-        console.error('Error:', error.message);
       }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
   };
 
   return (
