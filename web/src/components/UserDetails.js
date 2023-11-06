@@ -259,29 +259,47 @@ const Userdetails = () => {
                                 </button>
                             </div>
                             <div className="tab-pane fade" id="parcel-details">
-                                <div className="row g-3 p-3">
-                                    {parcelBookings.map((booking, index) => (
-                                        <div key={index} className="col-md-6">
-                                            <label className="form-label">Parcel ID</label>
-                                            <input type="text" className="form-control" value={booking.parcelId} readOnly />
-                                            <label className="form-label mt-2">Parcel Status</label>
-                                            <input type="text" className="form-control mb-5" value={booking.status} readOnly />
+                                {parcelBookings.length === 0 ? (
+                                    <div className="row g-3 p-3">
+                                        <div className="col-md-12">
+                                            <p>You don't have any parcel details yet.</p>
                                         </div>
-                                    ))}
-                                </div>
+                                    </div>
+                                ) : (
+                                    <div className="row g-3 p-3">
+                                        {parcelBookings.map((booking, index) => (
+                                            <div key={index} className="col-md-6">
+                                                <label className="form-label">Parcel ID</label>
+                                                <input type="text" className="form-control" value={booking.parcelId} readOnly />
+                                                <label className="form-label mt-2">Parcel Status</label>
+                                                <input type="text" className="form-control mb-5" value={booking.status} readOnly />
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <div className="tab-pane fade" id="subscription">
-                            <div>
-                  <label className="form-label">Subscription ID</label>
-                  <input type="text" className="form-control" value={subscriptionDetails?.subscriptionId || ''} readOnly />
-                  <label className="form-label">Balance</label>
-                  <input type="text" className="form-control" value={subscriptionDetails?.balance || ''} readOnly />
-                </div>
-
-                {/* Display the generated QR code */}
-                <img src={qrCodeImage} alt="Updated QR Code" style={{ width: '200px', height: '200px' }} />
+                                {!subscriptionDetails ? (
+                                    <div className="row g-3 p-3">
+                                        <div className="col-md-12">
+                                            <p>You don't have any subscription plans subscribed.</p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="row g-3 p-3">
+                                        <div>
+                                            <label className="form-label">Subscription ID</label>
+                                            <input type="text" className="form-control" value={subscriptionDetails?.subscriptionId || ''} readOnly />
+                                            <label className="form-label">Balance</label>
+                                            <input type="text" className="form-control" value={subscriptionDetails?.balance || ''} readOnly />
+                                        </div>
+                                        <div style={{ display: 'flex', justifyContent: 'center' }}>
+                                          <img src={qrCodeImage} alt="Updated QR Code" style={{ width: '200px', height: '200px', display: 'block' }} />
+                                        </div>
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                           </div>
                     </div>
                 </div>
             </div>
