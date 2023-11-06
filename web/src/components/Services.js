@@ -40,7 +40,7 @@ function Services() {
        
        image= {Parcel}
        heading = "Parcel Bookings"
-       text = "Simplify Parcel Booking Online: Enjoy the convenience of booking parcels online with swfitrail. Easily arrange shipments from your home or office using our user-friendly platform. Send parcels to your preferred destinations effortlessly. Trust swfitrail for efficient online parcel booking."
+       text = "Simplify Parcel Booking Online: Enjoy the convenience of booking parcels online with swfitrail. Easily arrange shipments from your home or office using our user-friendly platform. Send parcels to your preferred destinations effortlessly."
        title = "Parcel Booking"
        link = "/Booking"
       />
