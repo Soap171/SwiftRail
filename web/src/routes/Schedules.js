@@ -67,7 +67,7 @@ function Schedules() {
 
   const handleSearch = async () => {
     if (!currentStation || !destinationStation) {
-      setValidationError('Please select both Current and Destination Stations.');
+      alert('Please select both Current and Destination Stations.');
       return;
     }
 
@@ -157,7 +157,6 @@ function Schedules() {
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <label>Current Station:</label>
               <Select
                 options={currentStationOptions}
                 value={currentStation}
@@ -168,8 +167,7 @@ function Schedules() {
           </div>
           <div className="col-md-6">
             <div className="form-group">
-              <label>Destination Station:</label>
-              <Select
+           <Select
                 options={destinationStationOptions}
                 value={destinationStation}
                 onChange={(selectedOption) => setDestinationStation(selectedOption)}
@@ -186,7 +184,7 @@ function Schedules() {
           </div>
         </div>
         <div className="mt-4">
-          <h2>Fetched Schedules</h2>
+          <h2>Available Schedules</h2>
           <table className="table">
             <thead>
               <tr>
