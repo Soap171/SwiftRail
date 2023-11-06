@@ -52,10 +52,9 @@ function Subscriptions() {
 
         
        <div className="container">
-          <h1 className="text-center mt-4">Subscription Plans</h1>
-          <p className="text-center text-lg-center text-md-center">
-          Flexibility Meets Digital Ticketing: Your Journey, Your Way! Choose a Flexible Plan for Seamless QR Digital Ticketing
-         </p>
+          <h5 className="text-center text-lg-center text-md-center mt-4">
+          Flexibility Meets Digital Ticketing: Your Journey, Your Way! Choose a Flexible Plan for Seamless QR Digital Ticketing !!
+         </h5>
        </div>
 
         <div className="row">

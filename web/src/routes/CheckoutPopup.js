@@ -114,7 +114,6 @@ function CheckoutPopup() {
             </div>
           ) : (
             <div className="col-md-6 offset-md-3">
-              <h2>Payment Information</h2>
               <form onSubmit={handlePayment}>
                 <div className="form-group">
                   <label htmlFor="cardType">Card Type</label>
