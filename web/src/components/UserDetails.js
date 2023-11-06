@@ -103,13 +103,14 @@ const Userdetails = () => {
       }, [userData, userDetails]);
 
       const generateQRCode = async () => {
-        if (subscriptionDetails) {
+        if (subscriptionDetails && userData) {
           const qrData = JSON.stringify({
             transactionID: subscriptionDetails.subscriptionId,
             customerNIC: userData.NIC,
             balance: subscriptionDetails.balance || 0, // Include 'balance' in the QR code
           });
-    
+      
+          // Use the data object directly without stringifying
           QRCode.toDataURL(qrData, (err, url) => {
             if (err) {
               console.error('Error generating QR code:', err);
@@ -119,6 +120,7 @@ const Userdetails = () => {
           });
         }
       };
+      
 
     return (
         <div className="container light-style flex-grow-1 container-p-y">
