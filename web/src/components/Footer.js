@@ -32,8 +32,9 @@ function Footer() {
 
             <div className="mb-4">
               <h5>Contact Us</h5>
-              <p className='mt-4'>Email: admin@swiftrail.org</p>
-              <p>Whatsapp: +94 713652180</p>
+               <a href='mailto: admin@swiftrail.org' className='footer-link'>Email: admin@swiftrail.org</a>
+               <p> <a href="tel:+94713652180" className='footer-link'>Mobile: +94 713652180</a></p>
+              
             </div>
           </div>
 
