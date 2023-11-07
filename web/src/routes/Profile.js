@@ -10,28 +10,7 @@ import Userdetails from '../components/UserDetails';
 
 
 function Profile() {
-  const user = {
-    name: 'John Doe',
-    nic: '123456789',
-    contactNumber: '123-456-7890',
-    address: '123 Main St, City',
-    hasSubscription: true,
-    subscriptionDetails: {
-      planName: 'Premium Plan',
-      subscriptionDate: '2023-10-14',
-      expirationDate: '2024-10-14',
-    },
-    parcelBookings: [
-      {
-        parcelId: 'ABCD123',
-        status: 'In Transit',
-      },
-      {
-        parcelId: 'EFGH456',
-        status: 'Delivered',
-      },
-    ],
-  };
+ 
 
   return (
     <>
