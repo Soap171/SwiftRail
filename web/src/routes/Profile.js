@@ -3,7 +3,6 @@ import Footer from '../components/Footer';
 import Hero from '../components/Hero';
 import Navbar from '../components/Navbar';
 import ProfileImg from '../assets/profile-min.jpg';
-import './Profile.css'
 import Userdetails from '../components/UserDetails';
 
 
