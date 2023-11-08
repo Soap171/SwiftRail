@@ -80,7 +80,7 @@ export default function Booking() {
         // Send SMS to the sender's contact number
         try {
           const message = 'Your parcel has been successfully booked. Thank you!';
-          await axios.post('http://localhost:3001/send-sms', {
+          await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', {
             message,
             phoneNumber: formData.senderPhone, // assuming sender's phone number
           });
