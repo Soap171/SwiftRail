@@ -1,7 +1,7 @@
 import NavBar from '../components/Navbar';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import SubscriptionPlan from '../components/SubscriptionPlan';
-import img from '../assets/Subscription.jpg'
+import img from '../assets/Subscription-min.jpg'
 import Hero from '../components/Hero'
 import Footer from '../components/Footer'
 import '../components/Button.css'

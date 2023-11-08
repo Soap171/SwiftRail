@@ -1,11 +1,11 @@
 import React from 'react'
 import DestinationData from './DestinationData'
-import Railway1 from '../assets/railway (1).jpg';
-import Railway2 from '../assets/railway (2).jpg';
-import Railway3 from '../assets/railway (3).jpg';
-import Railway4 from '../assets/railway (4).jpg';
-import Railway5 from '../assets/railway (5).jpg';
-import Railway6 from '../assets/railway (6).jpg';
+import Railway1 from '../assets/railway (1)-min.jpg';
+import Railway2 from '../assets/railway (2)-min.jpg';
+import Railway3 from '../assets/railway (3)-min.jpg';
+import Railway4 from '../assets/railway (4)-min.jpg';
+import Railway5 from '../assets/railway (5)-min.jpg';
+import Railway6 from '../assets/railway (6)-min.jpg';
 
 
 function Destination() {

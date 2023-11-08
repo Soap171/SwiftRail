@@ -1,9 +1,9 @@
 import React from 'react'
 import './Services.css'
 import ServicesData from './ServicesData'
-import Schedules from '../assets/Schedules.jpg'
-import QR from '../assets/QR.jpg'
-import Parcel from '../assets/Parcel.jpg'
+import Schedules from '../assets/Schedules-min.jpg'
+import QR from '../assets/QR-min.jpg'
+import Parcel from '../assets/Parcel-min.jpg'
 
 function Services() {
   return (

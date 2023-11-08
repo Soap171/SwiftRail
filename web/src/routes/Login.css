@@ -1,6 +1,6 @@
 /* Styles for smaller screens */
 .login-container {
-    background: url('../assets/login.jpg') center center no-repeat;
+    background: url('../assets/login-min.jpg') center center no-repeat;
     background-size: cover;
     background-attachment: scroll; /* Allow the background to scroll with the content on small screens */
     height: 100vh;

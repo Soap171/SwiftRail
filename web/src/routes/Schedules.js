@@ -4,9 +4,8 @@ import Select from 'react-select';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer';
-import ScheduleImg from '../assets/Schedule.jpg';
+import ScheduleImg from '../assets/Schedule-min.jpg';
 import { useAuth } from '../components/AuthContext';
-import moment from 'moment-timezone';
 import axios from 'axios'; // Import Axios
 
 function Schedules() {
