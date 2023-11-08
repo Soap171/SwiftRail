@@ -6,6 +6,7 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import ScheduleImg from '../assets/Schedule.jpg';
 import { useAuth } from '../components/AuthContext';
+import moment from 'moment-timezone';
 import axios from 'axios'; // Import Axios
 
 function Schedules() {
@@ -109,10 +110,58 @@ function Schedules() {
   };
 
   const handleNotify = (scheduleItem) => {
-    setShowModal(true);
-    setMobileNumber('');
-    setSelectedSchedule(scheduleItem); // Store selected schedule
+    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
+  
+    // Get the current date and time in Colombo's timezone
+    const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' });
+    const currentMillis = new Date(currentDateTime).getTime(); // Current time in milliseconds
+  
+    if (scheduleItem && scheduleItem.arrivalTime) {
+      // Get today's date
+      const today = new Date();
+      const [hours, minutes] = scheduleItem.arrivalTime.split(':');
+      today.setHours(hours, minutes, 0, 0); // Set today's date with the arrival time
+  
+      const scheduleMillis = today.getTime();
+  
+      // Calculate the difference between the schedule's arrival time and the current time
+      const timeDifference = scheduleMillis - currentMillis;
+  
+      // Console logs for debugging
+      console.log('Current Time in Colombo:', new Date(currentMillis));
+      console.log('Schedule Arrival Time:', today);
+      console.log('Time Difference:', timeDifference);
+  
+      // Check if the schedule's arrival time is within the next 30 minutes
+      if (timeDifference >= 0 && timeDifference <= thirtyMinutesInMilliseconds) {
+        setShowModal(true);
+        setMobileNumber('');
+        setSelectedSchedule(scheduleItem); // Store selected schedule
+      } else {
+        alert('You will receive notifications only for schedules with arrival times within the next 30 minutes.');
+      }
+    } else {
+      // Handle the case where scheduleItem or its arrival time is undefined
+      console.error('Schedule arrival time is missing or undefined.');
+    }
   };
+
+// Function to manually parse the date string
+function parseDate(dateString) {
+  // Assumes date format: "YYYY-MM-DDTHH:mm:ssZ"
+  const dateParts = dateString.split(/[-T:]/);
+  // Extract individual date parts
+  const year = dateParts[0];
+  const month = dateParts[1] - 1; // Months are 0 indexed
+  const day = dateParts[2];
+  const timeParts = dateParts[3].split(":");
+  const hours = timeParts[0];
+  const minutes = timeParts[1];
+  const seconds = timeParts[2].replace('Z', '');
+
+  return new Date(year, month, day, hours, minutes, seconds);
+}
+
 
 
   const handleModalClose = () => {
