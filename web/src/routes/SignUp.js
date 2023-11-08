@@ -67,7 +67,7 @@ function SignUp() {
   
     // Make an HTTP POST request to your server to send the SMS
     try {
-      await axios.post('http://localhost:3001/send-sms', { message, phoneNumber });
+      await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', { message, phoneNumber });
       console.log('SMS Sent Successfully');
     } catch (error) {
       console.error('Failed to send SMS:', error);

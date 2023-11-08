@@ -131,7 +131,7 @@ function Schedules() {
     setInputValid(true);
   
     try {
-      const { data } = await axios.post('http://localhost:3001/send-sms', {
+      const { data } = await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', {
         message: `You have a notification for train ${selectedSchedule.trainName}. Departure: ${selectedSchedule.departureTime}. Arrival: ${selectedSchedule.arrivalTime}`,
         phoneNumber: mobileNumber,
       });
