@@ -146,22 +146,6 @@ function Schedules() {
     }
   };
 
-// Function to manually parse the date string
-function parseDate(dateString) {
-  // Assumes date format: "YYYY-MM-DDTHH:mm:ssZ"
-  const dateParts = dateString.split(/[-T:]/);
-  // Extract individual date parts
-  const year = dateParts[0];
-  const month = dateParts[1] - 1; // Months are 0 indexed
-  const day = dateParts[2];
-  const timeParts = dateParts[3].split(":");
-  const hours = timeParts[0];
-  const minutes = timeParts[1];
-  const seconds = timeParts[2].replace('Z', '');
-
-  return new Date(year, month, day, hours, minutes, seconds);
-}
-
 
 
   const handleModalClose = () => {
