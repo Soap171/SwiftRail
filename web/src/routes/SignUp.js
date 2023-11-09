@@ -3,7 +3,7 @@ import { Container, Form, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import supabase from '../config/supabaseClient';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
 
 function SignUp() {
   const navigate = useNavigate();

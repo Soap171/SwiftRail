@@ -36,7 +36,7 @@ function SubscriptionPlan(props) {
       navigate('/CheckoutPopup', { state: { subscriptionKey: primaryKey } });
     } else if (hasSubscription) {
       alert('User already has a subscription.Wait until it gets expired');
-      // Optionally, you could display a message or handle this case differently
+      
     } else {
       console.error('Invalid primaryKey or user data.');
     }

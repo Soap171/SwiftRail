@@ -19,9 +19,9 @@ function Subscriptions() {
   useEffect(() => {
     async function fetchSubscriptions() {
       try {
-        // Fetch subscription data from Supabase
+        
         const { data, error } = await supabase
-          .from('subscription') // Replace 'subscription' with your actual table name
+          .from('subscription') 
           .select('subscriptionPlanName, amount, description,subscriptionId');
 
         if (error) {
@@ -37,7 +37,7 @@ function Subscriptions() {
     }
 
     fetchSubscriptions();
-  }, []); // Run this effect only once when the component mounts
+  }, []); 
 
 
   return (
@@ -59,14 +59,14 @@ function Subscriptions() {
 
         <div className="row">
         {subscriptions.map((subscription, index) => (
-    <SubscriptionPlan
-      key={index} // This uses the array index as the key - be cautious with this approach
-      title={subscription.subscriptionPlanName}
-      price={`$${subscription.amount}/month`}
-      description={subscription.description}
-      primaryKey={subscription.subscriptionId} // Assuming subscriptionId is unique
-    />
-  ))}
+            <SubscriptionPlan
+            key={index}
+            title={subscription.subscriptionPlanName}
+            price={`$${subscription.amount}/month`}
+            description={subscription.description}
+            primaryKey={subscription.subscriptionId} 
+            />
+         ))}
           
         </div>
      <Footer/>

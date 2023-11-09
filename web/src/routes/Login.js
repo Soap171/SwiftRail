@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../components/AuthContext'; // Import the useAuth hook
+import { useAuth } from '../components/AuthContext'; 
 import 'bootstrap/dist/css/bootstrap.css';
 import './Login.css';
 import supabase from '../config/supabaseClient';
 
 function Login() {
   const navigate = useNavigate();
-  const { login } = useAuth(); // Use the login function from the AuthContext
+  const { login } = useAuth(); 
   const [userName, setUserName] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    // Check if the user exists with the provided credentials in the Supabase `customer` table
+    // Check if the user exists with the provided credentials in the customer table
     const { data, error } = await supabase
       .from('customer')
       .select('NIC, userName, password')
@@ -25,12 +25,11 @@ function Login() {
     if (error) {
       console.error('Error during login:', error);
     } else if (data) {
-      // User with the provided credentials found
-      // You can store the user's data in a state or context for further use
+      // store the user's data in a state or context for further use
       console.log(data)
       login(data);
 
-      // For now, navigate to the root page ('/')
+      //  navigate to the home page
       navigate('/');
     } else {
       alert('Login failed. Please check your credentials.');
@@ -81,7 +80,7 @@ function Login() {
         </div>
       </div>
       <div className="contact-button">
-        <a href="mailto:spiyumal48@gmail.com" className="btn btn-secondary btn-lg">
+        <a href="mailto:admin.swiftrail.org" className="btn btn-secondary btn-lg">
           Contact
         </a>
       </div>

@@ -95,7 +95,7 @@ function CheckoutPopup() {
 
         setPaymentComplete(true);
 
-        // Additional logic if payment is successful
+      
       } catch (error) {
         console.error('Error during payment:', error);
       }
@@ -134,53 +134,53 @@ function CheckoutPopup() {
                 </div>
 
                 <div className="form-group">
-      <label htmlFor="cardNumber">Card Number</label>
-      <InputMask
-        mask="9999 9999 9999 9999" // Custom mask for card number
-        maskChar=" "
-        type="text"
-        className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
-        id="cardNumber"
-        name="cardNumber"
-        value={formData.cardNumber}
-        onChange={handleInputChange}
-      />
-      {formErrors.cardNumber && <div className="invalid-feedback">{formErrors.cardNumber}</div>}
-    </div>
+                  <label htmlFor="cardNumber">Card Number</label>
+                   <InputMask
+                     mask="9999 9999 9999 9999" // Custom mask for card number
+                     maskChar=" "
+                     type="text"
+                     className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
+                     id="cardNumber"
+                     name="cardNumber"
+                     value={formData.cardNumber}
+                     onChange={handleInputChange}
+                   />
+                  {formErrors.cardNumber && <div className="invalid-feedback">{formErrors.cardNumber}</div>}
+               </div>
 
-    <div className="form-group">
-      <label htmlFor="expiration">Expiration Date</label>
-      <InputMask
-        mask="99/99" // Mask for expiration date (MM/YY)
-        maskChar=" "
-        type="text"
-        className={`form-control ${formErrors.expiration ? 'is-invalid' : ''}`}
-        id="expiration"
-        name="expiration"
-        value={formData.expiration}
-        onChange={handleInputChange}
-      />
-      {formErrors.expiration && <div className="invalid-feedback">{formErrors.expiration}</div>}
-    </div>
+               <div className="form-group">
+                <label htmlFor="expiration">Expiration Date</label>
+                  <InputMask
+                   mask="99/99" // Mask for expiration date (MM/YY)
+                   maskChar=" "
+                   type="text"
+                   className={`form-control ${formErrors.expiration ? 'is-invalid' : ''}`}
+                   id="expiration"
+                   name="expiration"
+                   value={formData.expiration}
+                   onChange={handleInputChange}
+                  />
+               {formErrors.expiration && <div className="invalid-feedback">{formErrors.expiration}</div>}
+             </div>
 
-    <div className="form-group">
-      <label htmlFor="cvv">CVV</label>
-      <InputMask
-        mask="999" // Mask for CVV
-        maskChar=" "
-        type="text"
-        className={`form-control ${formErrors.cvv ? 'is-invalid' : ''}`}
-        id="cvv"
-        name="cvv"
-        value={formData.cvv}
-        onChange={handleInputChange}
-      />
-      {formErrors.cvv && <div className="invalid-feedback">{formErrors.cvv}</div>}
-    </div>
+             <div className="form-group">
+              <label htmlFor="cvv">CVV</label>
+               <InputMask
+                mask="999" // Mask for CVV
+                maskChar=" "
+                type="text"
+                className={`form-control ${formErrors.cvv ? 'is-invalid' : ''}`}
+                id="cvv"
+                name="cvv"
+                value={formData.cvv}
+                onChange={handleInputChange}
+               />
+              {formErrors.cvv && <div className="invalid-feedback">{formErrors.cvv}</div>}
+             </div>
 
-                <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
+               <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
                   Pay
-                </button>
+              </button>
               </form>
             </div>
           )}

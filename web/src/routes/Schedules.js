@@ -6,10 +6,10 @@ import Hero from '../components/Hero';
 import Footer from '../components/Footer';
 import ScheduleImg from '../assets/Schedule-min.jpg';
 import { useAuth } from '../components/AuthContext';
-import axios from 'axios'; // Import Axios
+import axios from 'axios'; 
 
 function Schedules() {
-  const { isAuthenticated } = useAuth(); // Fetching isAuthenticated status 
+  const { isAuthenticated } = useAuth(); 
   const [currentStation, setCurrentStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [schedules, setSchedules] = useState([]);
@@ -18,7 +18,7 @@ function Schedules() {
   const [destinationStationOptions, setDestinationStationOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [mobileNumber, setMobileNumber] = useState('');
-  const [isInputValid, setInputValid] = useState(true); // State to manage input validation
+  const [isInputValid, setInputValid] = useState(true); 
   const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   useEffect(() => {
@@ -109,7 +109,7 @@ function Schedules() {
   };
 
   const handleNotify = (scheduleItem) => {
-    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
+    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes
   
     // Get the current date and time in Colombo's timezone
     const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' });
@@ -126,7 +126,7 @@ function Schedules() {
       // Calculate the difference between the schedule's arrival time and the current time
       const timeDifference = scheduleMillis - currentMillis;
   
-      // Console logs for debugging
+      // Console
       console.log('Current Time in Colombo:', new Date(currentMillis));
       console.log('Schedule Arrival Time:', today);
       console.log('Time Difference:', timeDifference);
@@ -154,7 +154,7 @@ function Schedules() {
 
   const handleMobileNumberSubmit = async () => {
     // Input validation for mobile number
-    if (!mobileNumber || !/^\d{10}$/.test(mobileNumber)) {
+    if (!mobileNumber || !/^\d{9}$/.test(mobileNumber)) {
       setInputValid(false);
       return;
     }
@@ -223,7 +223,6 @@ function Schedules() {
                 <th>Train Name</th>
                 <th>Departure</th>
                 <th>Arrival</th>
-                {/* Add more table headers based on your schedule data */}
               </tr>
             </thead>
             <tbody>
@@ -253,7 +252,7 @@ function Schedules() {
                   value={mobileNumber}
                   onChange={(e) => {
                     setMobileNumber(e.target.value);
-                    setInputValid(true); // Reset validation on input change
+                    setInputValid(true); 
                   }}
                   className={`form-control mb-2 ${!isInputValid ? 'is-invalid' : ''}`}
                   placeholder="Enter your mobile number"

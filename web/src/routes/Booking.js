@@ -77,12 +77,13 @@ export default function Booking() {
           setShowSuccessAlert(false);
         }, 60000);
 
-        // Send SMS to the sender's contact number
+
+        // Send SMS to the sender's contact number about the parcel 
         try {
           const message = 'Your parcel has been successfully booked. Thank you!';
           await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', {
             message,
-            phoneNumber: formData.senderPhone, // assuming sender's phone number
+            phoneNumber: formData.senderPhone, 
           });
           console.log('Success message sent to the sender!');
         } catch (error) {

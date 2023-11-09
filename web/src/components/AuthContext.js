@@ -8,13 +8,12 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true); // Add isLoading state
+  const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
     const savedUserData = localStorage.getItem('userData');
     if (savedUserData) {
       const parsedData = JSON.parse(savedUserData);
-      console.log('User data retrieved from local storage:', parsedData);
       setUserData(parsedData);
     } else {
       console.log('No user data found in local storage.');
