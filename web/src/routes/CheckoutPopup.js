@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
-import CheckoutImg from '../assets/Checkout.jpg';
+import CheckoutImg from '../assets/Checkout-min.jpg';
 import { useAuth } from '../components/AuthContext';
-import QRCode from 'qrcode';
 import supabase from '../config/supabaseClient';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import InputMask from 'react-input-mask';
+
 
 function CheckoutPopup() {
   const navigate = useNavigate();
@@ -25,6 +26,8 @@ function CheckoutPopup() {
   const subscriptionKey = location.state ? location.state.subscriptionKey : null;
   const [formErrors, setFormErrors] = useState({});
 
+
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -33,9 +36,18 @@ function CheckoutPopup() {
   const validateForm = () => {
     const errors = {};
 
-    // Validation logic for card details (example - card number)
     if (!formData.cardNumber) {
       errors.cardNumber = 'Card Number is required';
+    }
+
+    if (!formData.expiration) {
+      errors.expiration = 'Expiration Date is required';
+    }
+
+    if (!formData.cvv) {
+      errors.cvv = 'CVV is required';
+    } else if (formData.cvv.length !== 3) {
+      errors.cvv = 'CVV must be a 3-digit number';
     }
 
     setFormErrors(errors);
@@ -50,7 +62,6 @@ function CheckoutPopup() {
         const subscriptionDuration = 30;
         const today = new Date().toISOString().split('T')[0];
 
-        // Fetch subscription data to get the amount for the chosen subscription
         const { data: subscriptionData, error: subscriptionError } = await supabase
           .from('subscription')
           .select('amount')
@@ -64,7 +75,6 @@ function CheckoutPopup() {
 
         const amount = subscriptionData ? subscriptionData.amount : 0;
 
-        // Update the customerSubscription table in Supabase
         const { data: updatedData, error: updateError } = await supabase
           .from('customerSubscription')
           .upsert([
@@ -83,12 +93,9 @@ function CheckoutPopup() {
           return;
         }
 
-        setPaymentComplete(true); // Payment successful
-       
+        setPaymentComplete(true);
 
-       
-
-        
+      
       } catch (error) {
         console.error('Error during payment:', error);
       }
@@ -110,9 +117,7 @@ function CheckoutPopup() {
             </div>
           ) : (
             <div className="col-md-6 offset-md-3">
-              <h2>Payment Information</h2>
               <form onSubmit={handlePayment}>
-                {/* Card Type */}
                 <div className="form-group">
                   <label htmlFor="cardType">Card Type</label>
                   <select
@@ -127,49 +132,55 @@ function CheckoutPopup() {
                     <option value="amex">American Express</option>
                   </select>
                 </div>
-                {/* Card Number */}
+
                 <div className="form-group">
                   <label htmlFor="cardNumber">Card Number</label>
-                  <input
-                    type="text"
-                    className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
-                    id="cardNumber"
-                    name="cardNumber"
-                    value={formData.cardNumber}
-                    onChange={handleInputChange}
-                  />
+                   <InputMask
+                     mask="9999 9999 9999 9999" // Custom mask for card number
+                     maskChar=" "
+                     type="text"
+                     className={`form-control ${formErrors.cardNumber ? 'is-invalid' : ''}`}
+                     id="cardNumber"
+                     name="cardNumber"
+                     value={formData.cardNumber}
+                     onChange={handleInputChange}
+                   />
                   {formErrors.cardNumber && <div className="invalid-feedback">{formErrors.cardNumber}</div>}
-                </div>
-                {/* Expiration and CVV */}
-                <div className="form-row">
-                  <div className="form-group text-center">
-                    <label htmlFor="expiration">Expiration Date</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="expiration"
-                      name="expiration"
-                      value={formData.expiration}
-                      onChange={handleInputChange}
-                    />
-                    {/* Add any validation/error display for expiration */}
-                  </div>
-                  <div className="form-group text-center">
-                    <label htmlFor="cvv">CVV</label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="cvv"
-                      name="cvv"
-                      value={formData.cvv}
-                      onChange={handleInputChange}
-                    />
-                    {/* Add any validation/error display for CVV */}
-                  </div>
-                </div>
-                <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
+               </div>
+
+               <div className="form-group">
+                <label htmlFor="expiration">Expiration Date</label>
+                  <InputMask
+                   mask="99/99" // Mask for expiration date (MM/YY)
+                   maskChar=" "
+                   type="text"
+                   className={`form-control ${formErrors.expiration ? 'is-invalid' : ''}`}
+                   id="expiration"
+                   name="expiration"
+                   value={formData.expiration}
+                   onChange={handleInputChange}
+                  />
+               {formErrors.expiration && <div className="invalid-feedback">{formErrors.expiration}</div>}
+             </div>
+
+             <div className="form-group">
+              <label htmlFor="cvv">CVV</label>
+               <InputMask
+                mask="999" // Mask for CVV
+                maskChar=" "
+                type="text"
+                className={`form-control ${formErrors.cvv ? 'is-invalid' : ''}`}
+                id="cvv"
+                name="cvv"
+                value={formData.cvv}
+                onChange={handleInputChange}
+               />
+              {formErrors.cvv && <div className="invalid-feedback">{formErrors.cvv}</div>}
+             </div>
+
+               <button type="submit" className="btn btn-primary btn-block mt-2" style={{ width: '50%' }}>
                   Pay
-                </button>
+              </button>
               </form>
             </div>
           )}

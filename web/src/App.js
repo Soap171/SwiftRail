@@ -1,7 +1,6 @@
 import './Style.css';
 import { Route, Routes, Navigate,useNavigate } from 'react-router-dom';
 import Home from './routes/Home';
-import Contact from './routes/Contact';
 import Service from './routes/Service';
 import About from './routes/About';
 import Schedules from './routes/Schedules';
@@ -39,7 +38,6 @@ function App() {
           <Route path="/CheckoutPopup" element={<CheckoutPopup/>} />
           <Route path="/About" element={<About />} />
           <Route path="/Service" element={<Service />} />
-          <Route path="/Contact" element={<Contact />} />
           <Route path="/Schedules" element={<Schedules />} />
           <Route path="/Login" element={<Login />} />
           <Route path="/SignUp" element={<SignUp />} />

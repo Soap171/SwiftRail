@@ -3,6 +3,7 @@ import { Container, Form, Button, Modal } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import './SignUp.css';
 import supabase from '../config/supabaseClient';
+import axios from 'axios'; 
 
 function SignUp() {
   const navigate = useNavigate();
@@ -24,9 +25,10 @@ function SignUp() {
     });
   };
 
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Send the user data to Supabase for registration
     try {
       const { data, error } = await supabase.from('customer').upsert([
@@ -39,15 +41,36 @@ function SignUp() {
           email: formData.email,
         },
       ]);
-
+  
       if (error) {
         console.error('Error signing up:', error);
       } else {
         // Show the success modal
         setShowSuccessModal(true);
+        // Call a function to send the SMS with the entered userName and password
+        await sendSMS(formData.contactNumber, formData.username, formData.password);
       }
     } catch (error) {
       console.error('Error signing up:', error);
+    }
+  };
+  
+  
+  
+  
+  
+  
+
+  const sendSMS = async (phoneNumber, userName, password) => {
+    // Create the SMS message with a welcome greeting, username, and a security note
+    const message = `Welcome to SwiftRail, ${userName}! Thank you for signing up. Please remember not to share your credentials with anyone. Your password has been securely stored.`;
+  
+    // Make an HTTP POST request to your server to send the SMS
+    try {
+      await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', { message, phoneNumber });
+      console.log('SMS Sent Successfully');
+    } catch (error) {
+      console.error('Failed to send SMS:', error);
     }
   };
 
@@ -55,6 +78,7 @@ function SignUp() {
     setShowSuccessModal(false);
     navigate('/login');
   };
+
 
   return (
     <div className="background">

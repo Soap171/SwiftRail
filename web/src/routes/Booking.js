@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import NavBar from '../components/Navbar';
 import Footer from '../components/Footer';
 import Hero from '../components/Hero';
-import BookingImg from '../assets/Booking.jpg';
+import BookingImg from '../assets/Booking-min.jpg';
 import '../components/Button.css';
 import supabase from '../config/supabaseClient';
 import { useAuth } from '../components/AuthContext';
+import axios from 'axios';
 
 export default function Booking() {
   const { userData } = useAuth();
@@ -49,11 +50,11 @@ export default function Booking() {
     e.preventDefault();
 
     try {
-      // Insert data into the 'parcelBooking' table in Supabase
       const { data, error } = await supabase
         .from('parcelBooking')
         .insert([
           {
+           
             parcelContent: formData.parcelDescription,
             senderContactNo: formData.senderPhone,
             senderName: formData.senderName,
@@ -66,21 +67,32 @@ export default function Booking() {
           },
         ]);
 
-        if (error) {
-          console.error('Error inserting data:', error);
-          // Handle error (e.g., display an error message)
-        } else {
-          // Data inserted successfully
-          // Handle success (e.g., show a success message)
-          setShowSuccessAlert(true);
-          setFormData(initialFormData);
-          setTimeout(() => {
-            setShowSuccessAlert(false);
-          }, 60000);
+      if (error) {
+        console.error('Error inserting data:', error);
+        // Handle error
+      } else {
+        setShowSuccessAlert(true);
+        setFormData(initialFormData);
+        setTimeout(() => {
+          setShowSuccessAlert(false);
+        }, 60000);
+
+
+        // Send SMS to the sender's contact number about the parcel 
+        try {
+          const message = 'Your parcel has been successfully booked. Thank you!';
+          await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', {
+            message,
+            phoneNumber: formData.senderPhone, 
+          });
+          console.log('Success message sent to the sender!');
+        } catch (error) {
+          console.error('Failed to send SMS:', error);
         }
-      } catch (error) {
-        console.error('Error:', error.message);
       }
+    } catch (error) {
+      console.error('Error:', error.message);
+    }
   };
 
   return (
@@ -192,6 +204,17 @@ export default function Booking() {
               placeholder="Recipient's NIC"
               required
               value={formData.recipientNIC}
+              onChange={handleInputChange}
+            />
+          </div>
+          <div className="form-group mt-2">
+            <input
+              type="text"
+              className="form-control"
+              name="recipientName"
+              placeholder="Recipient's Name"
+              required
+              value={formData.recipientName}
               onChange={handleInputChange}
             />
           </div>

@@ -4,11 +4,12 @@ import Select from 'react-select';
 import Navbar from '../components/Navbar';
 import Hero from '../components/Hero';
 import Footer from '../components/Footer';
-import ScheduleImg from '../assets/Schedule.jpg';
+import ScheduleImg from '../assets/Schedule-min.jpg';
 import { useAuth } from '../components/AuthContext';
+import axios from 'axios'; 
 
 function Schedules() {
-  const { isAuthenticated } = useAuth(); // Fetching isAuthenticated status 
+  const { isAuthenticated } = useAuth(); 
   const [currentStation, setCurrentStation] = useState(null);
   const [destinationStation, setDestinationStation] = useState(null);
   const [schedules, setSchedules] = useState([]);
@@ -17,7 +18,8 @@ function Schedules() {
   const [destinationStationOptions, setDestinationStationOptions] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [mobileNumber, setMobileNumber] = useState('');
-  const [isInputValid, setInputValid] = useState(true); // State to manage input validation
+  const [isInputValid, setInputValid] = useState(true); 
+  const [selectedSchedule, setSelectedSchedule] = useState(null);
 
   useEffect(() => {
     async function fetchStations() {
@@ -65,7 +67,7 @@ function Schedules() {
 
   const handleSearch = async () => {
     if (!currentStation || !destinationStation) {
-      setValidationError('Please select both Current and Destination Stations.');
+      alert('Please select both Current and Destination Stations.');
       return;
     }
 
@@ -107,85 +109,76 @@ function Schedules() {
   };
 
   const handleNotify = (scheduleItem) => {
-    setShowModal(true);
-    console.log('Notify button clicked for schedule:', scheduleItem);
+    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes
+  
+    // Get the current date and time in Colombo's timezone
+    const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' });
+    const currentMillis = new Date(currentDateTime).getTime(); // Current time in milliseconds
+  
+    if (scheduleItem && scheduleItem.arrivalTime) {
+      // Get today's date
+      const today = new Date();
+      const [hours, minutes] = scheduleItem.arrivalTime.split(':');
+      today.setHours(hours, minutes, 0, 0); // Set today's date with the arrival time
+  
+      const scheduleMillis = today.getTime();
+  
+      // Calculate the difference between the schedule's arrival time and the current time
+      const timeDifference = scheduleMillis - currentMillis;
+  
+      // Console
+      console.log('Current Time in Colombo:', new Date(currentMillis));
+      console.log('Schedule Arrival Time:', today);
+      console.log('Time Difference:', timeDifference);
+  
+      // Check if the schedule's arrival time is within the next 30 minutes
+      if (timeDifference >= 0 && timeDifference <= thirtyMinutesInMilliseconds) {
+        setShowModal(true);
+        setMobileNumber('');
+        setSelectedSchedule(scheduleItem); // Store selected schedule
+      } else {
+        alert('You will receive notifications only for schedules with arrival times within the next 30 minutes.');
+      }
+    } else {
+      // Handle the case where scheduleItem or its arrival time is undefined
+      console.error('Schedule arrival time is missing or undefined.');
+    }
   };
+
+
 
   const handleModalClose = () => {
     setShowModal(false);
     setMobileNumber('');
   };
 
-  const handleMobileNumberSubmit = async (scheduleItem) => {
-    if (mobileNumber.trim() === '') {
+  const handleMobileNumberSubmit = async () => {
+    // Input validation for mobile number
+    if (!mobileNumber || !/^\d{9}$/.test(mobileNumber)) {
       setInputValid(false);
-    } else {
-      setInputValid(true);
-
-      const serverURL = 'http://localhost:5001/send-sms';
-      const apiKey = '696dbe1d';
-      const apiSecret = '6oNZJyHG3M5CI8me';
-      const from = '94740455459';
-      const to = mobileNumber;
-
-      const currentTime = new Date();
-      const notifyDepartureTime = new Date(scheduleItem.departureTime);
-      notifyDepartureTime.setMinutes(notifyDepartureTime.getMinutes() - 10);
-
-      const notifyArrivalTime = new Date(scheduleItem.arrivalTime);
-      notifyArrivalTime.setMinutes(notifyArrivalTime.getMinutes() - 10);
-
-      try {
-        if (currentTime < notifyDepartureTime) {
-          const text = `Your departure is scheduled at ${scheduleItem.departureTime}.`;
-          await sendNotificationToServer(serverURL, apiKey, apiSecret, from, to, text, notifyDepartureTime);
-        }
-
-        if (currentTime < notifyArrivalTime) {
-          const text = `Your arrival is scheduled at ${scheduleItem.arrivalTime}.`;
-          await sendNotificationToServer(serverURL, apiKey, apiSecret, from, to, text, notifyArrivalTime);
-        }
-      } catch (error) {
-        console.error('Error sending SMS:', error);
-        // Handle the error, e.g., display an error message to the user
-      }
+      return;
     }
-  };
-
-  const sendNotificationToServer = async (serverURL, apiKey, apiSecret, from, to, text, notifyTime) => {
-    const payload = {
-      apiKey,
-      apiSecret,
-      from,
-      to,
-      text,
-      notifyTime,
-    };
-
+  
+    // If the mobile number is valid
+    setInputValid(true);
+  
     try {
-      const response = await fetch(serverURL, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
+      const { data } = await axios.post('https://doubtful-hare-sweatshirt.cyclic.app/send-sms', {
+        message: `You have a notification for train ${selectedSchedule.trainName}. Departure: ${selectedSchedule.departureTime}. Arrival: ${selectedSchedule.arrivalTime}`,
+        phoneNumber: mobileNumber,
       });
-
-      const responseData = await response.json();
-
-      if (response.ok) {
-        console.log('SMS sent successfully!', responseData);
-        // Handle success, e.g., display a success message to the user
-      } else {
-        console.error('Failed to send SMS:', responseData);
-        // Log the specific error response
-        // Handle failure/error cases
-      }
+      console.log('SMS Sent Successfully:', data);
+  
+      // Close the modal after successful SMS sending
+      setShowModal(false);
+      setMobileNumber('');
     } catch (error) {
-      console.error('Error sending SMS:', error);
-      // Handle the error, e.g., display an error message to the user
+      console.error('Failed to send SMS:', error);
+      // Handle errors or provide user feedback
     }
   };
+
+
   
 
   return (
@@ -196,7 +189,6 @@ function Schedules() {
         <div className="row">
           <div className="col-md-6">
             <div className="form-group">
-              <label>Current Station:</label>
               <Select
                 options={currentStationOptions}
                 value={currentStation}
@@ -207,8 +199,7 @@ function Schedules() {
           </div>
           <div className="col-md-6">
             <div className="form-group">
-              <label>Destination Station:</label>
-              <Select
+           <Select
                 options={destinationStationOptions}
                 value={destinationStation}
                 onChange={(selectedOption) => setDestinationStation(selectedOption)}
@@ -225,14 +216,13 @@ function Schedules() {
           </div>
         </div>
         <div className="mt-4">
-          <h2>Fetched Schedules</h2>
+          <h2>Available Schedules</h2>
           <table className="table">
             <thead>
               <tr>
                 <th>Train Name</th>
                 <th>Departure</th>
                 <th>Arrival</th>
-                {/* Add more table headers based on your schedule data */}
               </tr>
             </thead>
             <tbody>
@@ -262,7 +252,7 @@ function Schedules() {
                   value={mobileNumber}
                   onChange={(e) => {
                     setMobileNumber(e.target.value);
-                    setInputValid(true); // Reset validation on input change
+                    setInputValid(true); 
                   }}
                   className={`form-control mb-2 ${!isInputValid ? 'is-invalid' : ''}`}
                   placeholder="Enter your mobile number"
