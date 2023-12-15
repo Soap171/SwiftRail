@@ -1,4 +1,4 @@
-import React from 'react';
+import React from "react";
 
 function AboutData({ heading, text, textItems }) {
   return (
@@ -22,9 +22,9 @@ function AboutData({ heading, text, textItems }) {
       </div>
       <style jsx>{`
         .text {
-          width: 100%; /* Adjust the width as needed */
-          max-width: 800px; /* Set a maximum width if desired */
-          margin: 0 auto; /* Center the content */
+          width: 100%;
+          max-width: 1000px;
+          margin: 0 auto;
         }
       `}</style>
     </section>
